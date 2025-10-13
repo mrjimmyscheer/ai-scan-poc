@@ -1,106 +1,131 @@
-import { useEffect, useRef, useMemo } from "react";
-import { Chart } from "chart.js/auto";
-import html2pdf from "html2pdf.js";
-import Navbar from "../components/Navbar";
+import React, { useRef } from "react";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
-const levels = [
-  { naam: "Level 1 – Basiskennis", domein: "kennis" },
-  { naam: "Level 2 – Praktisch gebruik", domein: "praktijk" },
-  { naam: "Level 3 – Didactische integratie", domein: "didactiek" },
-  { naam: "Level 4 – Professionalisering", domein: "professionaliteit" }
-];
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export default function ResultPage({ answers }) {
-  const chartRef = useRef(null);
-  const chartInstance = useRef(null);
+function recommendationsFor(level) {
+  if (!level) return [];
+  switch (level) {
+    case "Novice":
+      return [
+        "Begin met basisuitleg over machine learning en dataethiek.",
+        "Introduceer simpele opdrachten met duidelijke beoordelingscriteria.",
+      ];
+    case "Intermediate":
+      return [
+        "Werk met casussen waarin studenten AI-output valideren.",
+        "Maak afspraken over bronnen en bronvermelding bij AI-gegenereerde teksten.",
+      ];
+    case "Proficient":
+      return [
+        "Ontwerp opdrachten rondom interpretability en bias-detectie.",
+        "Introduceer peer-review van model-uitkomsten.",
+      ];
+    case "Advanced":
+      return [
+        "Integreer AI-governance in curricula en onderzoeksmethodes.",
+        "Ontwikkel evaluaties die verantwoordelijk gebruik belonen.",
+      ];
+    default:
+      return [];
+  }
+}
 
-  const domeinScores = useMemo(() => 
-    levels.map((l) => (answers[l.domein] || []).reduce((a, b) => a + b.score, 0)),
-    [answers]
-  );
-
-  useEffect(() => {
-    if (chartRef.current) {
-      if (chartInstance.current) chartInstance.current.destroy();
-
-      chartInstance.current = new Chart(chartRef.current, {
-        type: "radar",
-        data: {
-          labels: levels.map((l) => l.naam),
-          datasets: [
-            {
-              label: "AI Scan Profiel",
-              data: domeinScores,
-              backgroundColor: "rgba(54, 162, 235, 0.2)",
-              borderColor: "rgba(54, 162, 235, 1)",
-              borderWidth: 2,
-            },
-          ],
-        },
-        options: {
-          scales: {
-            r: {
-              angleLines: { color: 'rgba(0,0,0,0.1)' },
-              grid: { color: 'rgba(0,0,0,0.1)' }
-            }
-          }
-        }
-      });
-    }
-  }, [domeinScores]);
-
-  function downloadPDF() {
-    const element = document.getElementById("resultaten");
-    const opt = {
-      margin: 0.5,
-      filename: "ai-scan-resultaten.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-    };
-    html2pdf().set(opt).from(element).save();
+export default function ResultPage({ session, restart, backToLanding }) {
+  if (!session || !session.results) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold">Geen resultaten gevonden</h2>
+          <p className="mt-2 text-slate-400">Start de scan om resultaten te krijgen.</p>
+          <div className="mt-4 flex gap-3 justify-center">
+            <button onClick={backToLanding} className="px-4 py-2 rounded bg-white/5">Terug</button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  function profiel() {
-    const totaal = Object.values(answers)
-      .flat()
-      .reduce((a, b) => a + b.score, 0);
+  const { overall, level, domains } = session.results;
+  const recs = recommendationsFor(level);
+  const chartRef = useRef();
 
-    if (totaal < 25) return "Beginner – Je staat aan het begin van je AI-reis.";
-    if (totaal < 40) return "Gevorderd – Je gebruikt AI al regelmatig.";
-    return "Expert – Je bent een AI-pionier in je onderwijs!";
+  const chartData = {
+    labels: domains.map((d) => d.title),
+    datasets: [
+      {
+        label: "Score per domein",
+        data: domains.map((d) => d.score),
+        backgroundColor: "rgba(99, 102, 241, 0.8)",
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: true, max: 100 },
+    },
+    plugins: { legend: { display: false } },
+    animation: { duration: 800 },
+  };
+
+  async function downloadPDF() {
+    const element = chartRef.current;
+    const canvas = await html2canvas(element);
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF("p", "mm", "a4");
+    const width = pdf.internal.pageSize.getWidth();
+    const height = (canvas.height * width) / canvas.width;
+
+    pdf.text("AI Maturity Scan Resultaten", 10, 10);
+    pdf.addImage(imgData, "PNG", 10, 20, width - 20, height);
+    pdf.save("AI-Maturity-Resultaten.pdf");
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Navbar onHome={() => window.location.reload()} />
-      <div id="resultaten" className="p-8 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-center">Jouw Resultaten</h1>
+    <div className="min-h-screen flex items-start justify-center py-16">
+      <div className="max-w-3xl w-full p-6 rounded-2xl bg-slate-800/60 border border-white/5" ref={chartRef}>
+        <h2 className="text-2xl font-bold">Resultaten — AI Maturity</h2>
+        <p className="mt-2 text-slate-300">
+          Totale score: <span className="font-semibold">{overall}%</span> — Niveau:{" "}
+          <span className="font-semibold">{level}</span>
+        </p>
 
-        <div className="bg-white/90 shadow-lg rounded-2xl p-6 mb-8 border border-gray-200">
-          <canvas ref={chartRef} className="mx-auto mb-2" style={{ maxWidth: "420px" }} />
-          <p className="text-center text-xl font-semibold mt-4">{profiel()}</p>
+        <div className="mt-6">
+          <Bar data={chartData} options={chartOptions} />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {levels.map((level) => (
-            <div key={level.naam} className="bg-white/90 shadow rounded-xl p-6 border border-gray-200">
-              <h2 className="font-semibold text-lg mb-3">{level.naam}</h2>
-              <ul className="list-disc list-inside text-gray-700 space-y-1">
-                {(answers[level.domein] || []).map((a, i) => (
-                  <li key={i}>{a.vraag} → <strong>{a.score}</strong></li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div className="mt-6 grid md:grid-cols-2 gap-4">
+          <div className="p-4 bg-white/3 rounded-lg">
+            <h4 className="font-semibold">Wat dit betekent</h4>
+            <p className="text-sm text-slate-200 mt-2">
+              Je score geeft een indicatie van kennis, toepassing, governance en kritisch denken.
+              Gebruik de aanbevelingen om concrete stappen te zetten.
+            </p>
+          </div>
+
+          <div className="p-4 bg-white/4 rounded-lg">
+            <h4 className="font-semibold">Aanbevelingen</h4>
+            <ol className="list-disc list-inside mt-2 text-sm text-slate-200">
+              {recs.map((r, i) => <li key={i}>{r}</li>)}
+            </ol>
+          </div>
         </div>
 
-        <div className="flex justify-center">
-          <button
-            onClick={downloadPDF}
-            className="mt-8 px-6 py-3 bg-purple-600 text-white rounded-lg shadow-lg hover:bg-purple-700"
-          >
-            Download als PDF
+        <div className="mt-6 flex gap-3 flex-wrap">
+          <button onClick={restart} className="px-4 py-2 rounded bg-indigo-600 text-white">
+            Scan opnieuw
+          </button>
+          <button onClick={backToLanding} className="px-4 py-2 rounded bg-white/5">
+            Terug naar start
+          </button>
+          <button onClick={downloadPDF} className="px-4 py-2 rounded bg-emerald-600 text-white">
+            Download PDF
           </button>
         </div>
       </div>
