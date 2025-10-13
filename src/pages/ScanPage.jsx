@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import QuestionCard from "../components/QuestionCard";
 import { motion } from "framer-motion";
 import { computeDomainScores } from "../utils/scoring";
+import surveyData from "../survey_nl_cleaned.json";
 
 export default function ScanPage({ session, save, finish, abort }) {
   const [survey, setSurvey] = useState(null);
@@ -9,21 +10,35 @@ export default function ScanPage({ session, save, finish, abort }) {
   const [index, setIndex] = useState(session?.currentIndex || 0);
   const [questions, setQuestions] = useState([]);
 
+  // Load survey and flatten questions
   useEffect(() => {
-    fetch("../survey.json")
-      .then((r) => r.json())
-      .then((data) => {
-        setSurvey(data);
-        const allQs = data.domains.flatMap((d) =>
-          d.questions.map((q) => ({ ...q, domainId: d.id }))
-        );
-        setQuestions(allQs);
-      });
+    if (!surveyData || !surveyData.domains) return;
+
+    setSurvey(surveyData);
+
+    const allQs = surveyData.domains.flatMap((d) =>
+      d.questions.map((q, qIndex) => ({
+        ...q,
+        domainId: d.id,
+        id: q.id || `domain-${d.id}-q-${qIndex}`,
+      }))
+    );
+
+    setQuestions(allQs);
+
+    // Clamp initial index
+    setIndex(session?.currentIndex && session.currentIndex < allQs.length ? session.currentIndex : 0);
   }, []);
 
+  // Auto-save answers
   useEffect(() => {
-    save({ answers, currentIndex: index, started: true });
-  }, [answers, index]);
+    if (questions.length === 0) return;
+    save({
+      answers,
+      currentIndex: Math.min(index, questions.length - 1),
+      started: true,
+    });
+  }, [answers, index, questions.length]);
 
   if (!survey || questions.length === 0) {
     return (
@@ -33,16 +48,20 @@ export default function ScanPage({ session, save, finish, abort }) {
     );
   }
 
-  const currentQuestion = questions[index];
-  const progressPct = Math.round((index / questions.length) * 100);
+  const currentQuestion = questions[index] || questions[0];
+  const progressPct = Math.round(((index + 1) / questions.length) * 100);
 
-  function onAnswer(qId, key) {
-    const next = { ...answers, [qId]: key };
+  function onAnswer(qId, value) {
+    console.log("Answered:", qId, value); // DEBUG
+    const numericValue = Number(value);
+    const next = { ...answers, [qId]: numericValue };
     setAnswers(next);
+
     if (index + 1 < questions.length) {
       setIndex(index + 1);
     } else {
       const results = computeDomainScores(survey.domains, next);
+      console.log("Computed results on finish:", results); // DEBUG
       finish(results);
     }
   }
@@ -87,7 +106,7 @@ export default function ScanPage({ session, save, finish, abort }) {
           <QuestionCard
             question={currentQuestion}
             selected={answers[currentQuestion.id]}
-            onAnswer={(k) => onAnswer(currentQuestion.id, k)}
+            onAnswer={(value) => onAnswer(currentQuestion.id, value)}
           />
         </motion.div>
 
@@ -114,9 +133,7 @@ export default function ScanPage({ session, save, finish, abort }) {
             </button>
           </div>
 
-          <div className="text-sm text-slate-400">
-            Auto-saved in je browser
-          </div>
+          <div className="text-sm text-slate-400">Auto-saved in je browser</div>
         </div>
 
         <div className="mt-8 flex justify-between">

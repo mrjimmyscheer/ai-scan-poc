@@ -6,13 +6,15 @@ export function computeDomainScores(domains, answers) {
 
     for (const q of questions) {
       const answerKey = answers[q.id];
-      if (!answerKey) continue;
 
-      const opt = q.options.find((o, i) => o.key === answerKey || i + 1 === Number(answerKey));
+      if (answerKey === undefined || answerKey === null) continue;
+
+      const opt = q.options.find((o) => o.value === Number(answerKey));
       if (!opt) continue;
 
       const index = q.options.findIndex((o) => o === opt);
       const score = (index / (q.options.length - 1)) * 100;
+
       total += score;
       count++;
     }
@@ -29,6 +31,10 @@ export function computeDomainScores(domains, answers) {
   if (overall >= 80) level = "Advanced";
   else if (overall >= 60) level = "Proficient";
   else if (overall >= 40) level = "Intermediate";
+
+  console.log("Answers:", answers);
+  console.log("DomainResults:", domainResults);
+  console.log("Overall:", overall, "Level:", level);
 
   return { overall, level, domains: domainResults };
 }

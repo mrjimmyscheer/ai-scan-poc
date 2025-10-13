@@ -1,0 +1,149 @@
+{
+  "language": "nl",
+  "domains": [
+    {
+      "id": "domain1",
+      "title": "Begrip van het gebruik van generatieve AI door studenten",
+      "questions": [
+        {
+          "id": "QID13",
+          "text": "Informatie opzoeken over AI-veiligheid\nHoe vaak zoek je informatie over de veilige toepassing van generatieve AI in je onderwijs?",
+          "options": [
+            { "value": 0, "label": "Nooit" },
+            { "value": 1, "label": "Soms" },
+            { "value": 2, "label": "Vaak" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain2",
+      "title": "Menselijke controle en toezicht",
+      "questions": [
+        {
+          "id": "QID20",
+          "text": "Begrip van gegevensverwerking\nHoe goed begrijp je hoe gegevens worden verwerkt in de AI-systemen die je gebruikt?",
+          "options": [
+            { "value": 0, "label": "Ik heb geen idee wat er met mijn gegevens gebeurt" },
+            { "value": 1, "label": "Ik heb enig idee voor welke doelen mijn gegevens gebruikt worden" },
+            { "value": 2, "label": "Ik begrijp volledig hoe mijn gegevens worden verwerkt" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain3",
+      "title": "Transparantie",
+      "questions": [
+        {
+          "id": "QID25",
+          "text": "Gebruik van generatieve AI in het onderwijs\nHoe goed weet je hoe generatieve AI kan worden ingezet om het leren te verbeteren?",
+          "options": [
+            { "value": 0, "label": "Ik heb geen idee hoe generatieve AI kan helpen" },
+            { "value": 1, "label": "Ik heb enig idee van de voor- en nadelen" },
+            { "value": 2, "label": "Ik weet hoe ik AI optimaal kan benutten in mijn onderwijs" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain4",
+      "title": "Verbetering van onderwijskwaliteit met AI",
+      "questions": [
+        {
+          "id": "QID29",
+          "text": "Verbeteren van de kwaliteit van onderwijs\nHoe goed benut je AI-tools om de onderwijskwaliteit en betrokkenheid van studenten te verhogen?",
+          "options": [
+            { "value": 0, "label": "Ik weet niet hoe AI-tools hierbij helpen" },
+            { "value": 1, "label": "Ik heb enig idee van de voor- en nadelen" },
+            { "value": 2, "label": "Ik benut AI-tools optimaal voor beter onderwijs" }
+          ]
+        },
+        {
+          "id": "QID3",
+          "text": "Controleren van nauwkeurigheid\nHoe vaak controleer je of de output van generatieve AI correct is?",
+          "options": [
+            { "value": 0, "label": "Nooit" },
+            { "value": 1, "label": "Soms" },
+            { "value": 2, "label": "Vaak" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain5",
+      "title": "Algoritmekennis",
+      "questions": [
+        {
+          "id": "QID33",
+          "text": "Begrip van algoritmes\nHoe goed begrijp je hoe AI-algoritmes werken in de tools die je gebruikt?",
+          "options": [
+            { "value": 0, "label": "Ik heb geen idee hoe de algoritmes werken" },
+            { "value": 1, "label": "Ik heb enig idee hoe de algoritmes werken" },
+            { "value": 2, "label": "Ik begrijp volledig hoe de algoritmes werken" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain6",
+      "title": "Eerlijkheid en inclusiviteit",
+      "questions": [
+        {
+          "id": "QID38",
+          "text": "Zorgen voor eerlijkheid\nHoe goed ben je op de hoogte van mogelijke vooroordelen en bias in generatieve AI?",
+          "options": [
+            { "value": 0, "label": "Ik heb geen idee dat AI bias kan veroorzaken" },
+            { "value": 1, "label": "Ik heb enig idee van mogelijke bias" },
+            { "value": 2, "label": "Ik weet welke bias mogelijk is en hoe deze te vermijden" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain7",
+      "title": "Maatschappelijk en milieu-impact",
+      "questions": [
+        {
+          "id": "QID43",
+          "text": "Begrip van milieueffecten\nHoe goed ben je op de hoogte van de milieu-impact van het gebruik van generatieve AI?",
+          "options": [
+            { "value": 0, "label": "Ik heb geen idee" },
+            { "value": 1, "label": "Ik heb enig idee" },
+            { "value": 2, "label": "Ik begrijp volledig de milieu-impact" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain8",
+      "title": "Verantwoording",
+      "questions": [
+        {
+          "id": "QID48",
+          "text": "Evalueren van effectiviteit\nHoe vaak evalueer je het effect van AI-toepassingen in je onderwijs?",
+          "options": [
+            { "value": 0, "label": "Ik evalueer nooit" },
+            { "value": 1, "label": "Ik evalueer soms" },
+            { "value": 2, "label": "Ik evalueer vaak" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "domain10",
+      "title": "Toestemming voor gegevensgebruik",
+      "questions": [
+        {
+          "id": "QID53",
+          "text": "Gebruik van AIMES-gegevens\nGa je akkoord met het gebruik van je gegevens voor onderzoek naar AI-maturiteit in het onderwijs?",
+          "options": [
+            { "value": 0, "label": "Ik ga niet akkoord" },
+            { "value": 1, "label": "Ik ga akkoord" },
+            { "value": 2, "label": "Ik ga akkoord en geef extra informatie over mijn instelling" }
+          ]
+        }
+      ]
+    }
+  ]
+}
