@@ -1,107 +1,194 @@
-import { useEffect, useRef, useMemo } from "react";
-import { Chart } from "chart.js/auto";
-import html2pdf from "html2pdf.js";
-import Navbar from "../components/Navbar";
+import React, { useRef, useEffect } from "react";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Bar, Radar } from "react-chartjs-2";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
-const levels = [
-  { naam: "Level 1 – Basiskennis", domein: "kennis" },
-  { naam: "Level 2 – Praktisch gebruik", domein: "praktijk" },
-  { naam: "Level 3 – Didactische integratie", domein: "didactiek" },
-  { naam: "Level 4 – Professionalisering", domein: "professionaliteit" }
-];
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-export default function ResultPage({ answers }) {
-  const chartRef = useRef(null);
-  const chartInstance = useRef(null);
+function recommendationsFor(level) {
+  switch (level) {
+    case "Novice":
+      return ["Basis uitleg over AI.", "Simpele opdrachten."];
+    case "Intermediate":
+      return ["Case studies AI-validatie.", "Bronvermelding bij AI-teksten."];
+    case "Proficient":
+      return ["Interpretability & bias-opdrachten.", "Peer-review van output."];
+    case "Advanced":
+      return ["AI-governance integreren.", "Evaluaties verantwoord gebruik."];
+    default:
+      return [];
+  }
+}
 
-  const domeinScores = useMemo(() => 
-    levels.map((l) => (answers[l.domein] || []).reduce((a, b) => a + b.score, 0)),
-    [answers]
-  );
+export default function ResultPage({ session, restart, backToLanding }) {
+  const chartRef = useRef();
 
   useEffect(() => {
-    if (chartRef.current) {
-      if (chartInstance.current) chartInstance.current.destroy();
+    console.log("Session results:", session?.results);
+  }, [session]);
 
-      chartInstance.current = new Chart(chartRef.current, {
-        type: "radar",
-        data: {
-          labels: levels.map((l) => l.naam),
-          datasets: [
-            {
-              label: "AI Scan Profiel",
-              data: domeinScores,
-              backgroundColor: "rgba(54, 162, 235, 0.2)",
-              borderColor: "rgba(54, 162, 235, 1)",
-              borderWidth: 2,
-            },
-          ],
-        },
-        options: {
-          scales: {
-            r: {
-              angleLines: { color: 'rgba(0,0,0,0.1)' },
-              grid: { color: 'rgba(0,0,0,0.1)' }
-            }
-          }
-        }
-      });
-    }
-  }, [domeinScores]);
-
-  function downloadPDF() {
-    const element = document.getElementById("resultaten");
-    const opt = {
-      margin: 0.5,
-      filename: "ai-scan-resultaten.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-    };
-    html2pdf().set(opt).from(element).save();
+  if (!session || !session.results) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold">Geen resultaten gevonden</h2>
+          <p className="mt-2 text-slate-400">Start de scan om resultaten te krijgen.</p>
+          <div className="mt-4 flex gap-3 justify-center">
+            <button onClick={backToLanding} className="px-4 py-2 rounded bg-white/5">
+              Terug
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  function profiel() {
-    const totaal = Object.values(answers)
-      .flat()
-      .reduce((a, b) => a + b.score, 0);
+  const { overall, level, domains } = session.results;
 
-    if (totaal < 25) return "Beginner – Je staat aan het begin van je AI-reis.";
-    if (totaal < 40) return "Gevorderd – Je gebruikt AI al regelmatig.";
-    return "Expert – Je bent een AI-pionier in je onderwijs!";
+  console.log("Domains:", domains);
+
+  const radarData = {
+    labels: domains.map((d) => d.title),
+    datasets: [
+      {
+        label: "AI Maturity per domein",
+        data: domains.map((d) => d.score),
+        backgroundColor: "rgba(99,102,241,0.3)",
+        borderColor: "rgba(99,102,241,0.8)",
+        borderWidth: 2,
+        pointBackgroundColor: "rgba(99,102,241,0.8)",
+      },
+    ],
+  };
+
+  const radarOptions = { scales: { r: { min: 0, max: 100, ticks: { stepSize: 20 } } }, plugins: { legend: { display: false } } };
+
+  const barData = {
+    labels: domains.map((d) => d.title),
+    datasets: [
+      { label: "Score per domein", data: domains.map((d) => d.score), backgroundColor: "rgba(99,102,241,0.8)" },
+    ],
+  };
+
+  const barOptions = { responsive: true, scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { display: false } } };
+
+  const domainRecs = domains.map((d) =>
+    d.score < 40 ? `Versterk kennis in ${d.title}` : d.score < 70 ? `Werk aan verdieping van ${d.title}` : `Goed gedaan in ${d.title}, blijf toepassen`
+  );
+
+  async function downloadPDF() {
+    if (!chartRef.current) return;
+
+    const element = chartRef.current;
+    
+    const canvas = await html2canvas(element, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth() - 20;
+    const pageHeight = pdf.internal.pageSize.getHeight() - 20; 
+
+    const imgHeight = (canvas.height * pageWidth) / canvas.width;
+
+    if (imgHeight <= pageHeight) {
+      pdf.text("AI Maturity Scan Resultaten", 10, 10);
+      pdf.addImage(imgData, "PNG", 10, 20, pageWidth, imgHeight);
+    } else {
+      let remainingHeight = canvas.height;
+      let position = 0;
+      const pdfPageHeight = (canvas.height * pageWidth) / canvas.width * (pageHeight / imgHeight);
+
+      pdf.text("AI Maturity Scan Resultaten", 10, 10);
+
+      while (remainingHeight > 0) {
+        const canvasPage = document.createElement("canvas");
+        canvasPage.width = canvas.width;
+        canvasPage.height = Math.min(remainingHeight, canvas.height);
+
+        const ctx = canvasPage.getContext("2d");
+        ctx.drawImage(
+          canvas,
+          0,
+          position,
+          canvas.width,
+          canvasPage.height,
+          0,
+          0,
+          canvas.width,
+          canvasPage.height
+        );
+
+        const imgPage = canvasPage.toDataURL("image/png");
+        const h = (canvasPage.height * pageWidth) / canvas.width;
+
+        pdf.addImage(imgPage, "PNG", 10, 20, pageWidth, h);
+        remainingHeight -= canvasPage.height;
+        position += canvasPage.height;
+
+        if (remainingHeight > 0) pdf.addPage();
+      }
+    }
+
+    pdf.save("AI-Maturity-Resultaten.pdf");
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Navbar onHome={() => window.location.reload()} />
-      <div id="resultaten" className="p-8 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-center">Jouw Resultaten</h1>
+    <div className="min-h-screen flex items-start justify-center py-16">
+      <div ref={chartRef} className="max-w-3xl w-full p-6 rounded-2xl bg-slate-800/60 border border-white/5">
+        <h2 className="text-2xl font-bold">Resultaten — AI Maturity</h2>
+        <p className="mt-2 text-slate-300">
+          Totale score: <span className="font-semibold">{overall}%</span> — Niveau: <span className="font-semibold">{level}</span>
+        </p>
 
-        <div className="bg-white/90 shadow-lg rounded-2xl p-6 mb-8 border border-gray-200">
-          <canvas ref={chartRef} className="mx-auto mb-2" style={{ maxWidth: "420px" }} />
-          <p className="text-center text-xl font-semibold mt-4">{profiel()}</p>
+        <div className="mt-6">
+          <Radar data={radarData} options={radarOptions} />
+        </div>
+        <div className="mt-6">
+          <Bar data={barData} options={barOptions} />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {levels.map((level) => (
-            <div key={level.naam} className="bg-white/90 shadow rounded-xl p-6 border border-gray-200">
-              <h2 className="font-semibold text-lg mb-3">{level.naam}</h2>
-              <ul className="list-disc list-inside text-gray-700 space-y-1">
-                {(answers[level.domein] || []).map((a, i) => (
-                  <li key={i}>{a.vraag} → <strong>{a.score}</strong></li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div className="mt-6 grid md:grid-cols-2 gap-4">
+          <div className="p-4 bg-white/3 rounded-lg">
+            <h4 className="font-semibold">Wat dit betekent</h4>
+            <p className="text-sm text-slate-200 mt-2">
+              Je score geeft een indicatie van kennis, toepassing, governance en kritisch denken.
+            </p>
+          </div>
+
+          <div className="p-4 bg-white/4 rounded-lg">
+            <h4 className="font-semibold">Aanbevelingen per domein</h4>
+            <ol className="list-disc list-inside mt-2 text-sm text-slate-200">
+              {domainRecs.map((r, i) => <li key={i}>{r}</li>)}
+            </ol>
+          </div>
         </div>
 
-        <div className="flex justify-center">
-          <button
-            onClick={downloadPDF}
-            className="mt-8 px-6 py-3 bg-purple-600 text-white rounded-lg shadow-lg hover:bg-purple-700"
-          >
-            Download als PDF
-          </button>
+        <div className="mt-6 flex gap-3 flex-wrap">
+          <button onClick={restart} className="px-4 py-2 rounded bg-indigo-600 text-white">Scan opnieuw</button>
+          <button onClick={backToLanding} className="px-4 py-2 rounded bg-white/5">Terug naar start</button>
+          <button onClick={downloadPDF} className="px-4 py-2 rounded bg-emerald-600 text-white">Download PDF</button>
         </div>
       </div>
     </div>

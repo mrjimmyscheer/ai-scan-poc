@@ -2,5 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Smooth fonts & nicer scroll */
 html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+
+.card-blur {
+  background-clip: padding-box;
+}
+
+button { transition: transform .12s ease, box-shadow .12s ease; }
+
+:focus { outline: 3px solid rgba(99,102,241,0.2); outline-offset: 2px; }
+
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+  .safari-fix {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+}
