@@ -1,10 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
-export default function LandingPage({ onStart, resume, hasSaved, clearSaved }) {
+export default function LandingPage() {
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-16">
-      <div className="relative max-w-4xl w-full rounded-3xl p-8 bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-md shadow-2xl overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center px-6 py-16 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-slate-50">
+      <div className="relative max-w-4xl w-full rounded-3xl p-8 bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-xl shadow-2xl overflow-hidden border border-white/5">
+
         <svg className="pointer-events-none absolute -z-10 inset-0 w-full h-full" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden>
           <defs>
             <radialGradient id="g1" cx="30%" cy="40%" r="40%">
@@ -27,41 +31,61 @@ export default function LandingPage({ onStart, resume, hasSaved, clearSaved }) {
         </svg>
 
         <div className="grid md:grid-cols-2 gap-6 items-center">
+          {/* Left side */}
           <div>
-            <motion.h1 initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }} className="text-4xl md:text-5xl font-extrabold tracking-tight">
+            <motion.h1
+              initial={{ y: -10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl md:text-5xl font-extrabold tracking-tight"
+            >
               AI Maturity Scan
             </motion.h1>
-            <motion.p initial={{ y: 6, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.15, duration: 0.6 }} className="mt-4 text-slate-300">
-              Een korte, praktische scan voor docenten en studenten die inzicht geeft in kennis, toepassing en governance rondom AI.
+
+            <motion.p
+              initial={{ y: 6, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.15, duration: 0.6 }}
+              className="mt-4 text-slate-300"
+            >
+              Een korte, praktische scan die inzicht geeft in kennis, toepassing en governance rondom AI — speciaal voor docenten en studenten.
             </motion.p>
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <motion.button onClick={onStart} whileHover={{ scale: 1.03 }} className="px-6 py-3 rounded-2xl bg-indigo-600 text-white font-medium shadow hover:brightness-105">
+            <div className="mt-8 flex flex-wrap gap-3">
+              <motion.button
+                onClick={() => navigate("/scan")}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-6 py-3 rounded-2xl bg-indigo-600 text-white font-medium shadow-lg hover:brightness-110 transition"
+              >
                 Start de scan 🚀
               </motion.button>
 
-              {hasSaved && (
-                <>
-                  <motion.button onClick={resume} whileHover={{ scale: 1.03 }} className="px-5 py-3 rounded-2xl border border-slate-600 text-slate-100">
-                    Hervat
-                  </motion.button>
-                  <motion.button onClick={clearSaved} whileHover={{ scale: 1.03 }} className="px-4 py-3 rounded-2xl text-slate-100 bg-transparent hover:bg-white/5">
-                    Verwijder opgeslagen sessie
-                  </motion.button>
-                </>
-              )}
+              <motion.button
+                onClick={() => navigate("/results")}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-6 py-3 rounded-2xl border border-slate-600 text-slate-100 bg-transparent hover:bg-white/10 transition"
+              >
+                Bekijk resultaten
+              </motion.button>
             </div>
 
-            <ul className="mt-6 text-sm text-slate-400 space-y-2">
-              <li>• Duur: ~5–8 minuten — één vraag tegelijk, gefocuste interface.</li>
-              <li>• Resultaat: concreet maturity-level + aanbevelingen.</li>
-              <li>• Privacy: antwoorden blijven in je browser (localStorage)—geen externe verzending.</li>
+            <ul className="mt-6 text-sm text-slate-400 space-y-2 leading-relaxed">
+              <li>• Duur: ~5–8 minuten — één vraag per keer, gefocust.</li>
+              <li>• Resultaat: duidelijk maturity-niveau + aanbevelingen.</li>
+              <li>• Privacy: data blijft lokaal in je browser.</li>
             </ul>
           </div>
 
-          <div className="hidden md:block">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="hidden md:block"
+          >
             <div className="p-6 rounded-xl bg-slate-800/40 border border-white/5">
-              <h3 className="font-semibold mb-3">Wat meten we?</h3>
+              <h3 className="font-semibold mb-3 text-lg text-white">Wat meten we?</h3>
               <ol className="list-decimal list-inside text-slate-300 space-y-2">
                 <li>Kennis van AI-concepten</li>
                 <li>Toepassing in onderwijs of onderzoek</li>
@@ -69,9 +93,8 @@ export default function LandingPage({ onStart, resume, hasSaved, clearSaved }) {
                 <li>Critisch beoordelingsvermogen</li>
               </ol>
             </div>
-          </div>
+          </motion.div>
         </div>
-
       </div>
     </div>
   );
