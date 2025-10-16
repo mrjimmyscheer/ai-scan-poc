@@ -13,6 +13,24 @@
             { "value": 1, "label": "Soms" },
             { "value": 2, "label": "Vaak" }
           ]
+        },
+        {
+          "id": "QID14",
+          "text": "Studenten begeleiden bij AI-gebruik\nHoe vaak begeleid je studenten bij het verantwoord gebruik van generatieve AI?",
+          "options": [
+            { "value": 0, "label": "Nooit" },
+            { "value": 1, "label": "Soms" },
+            { "value": 2, "label": "Vaak" }
+          ]
+        },
+        {
+          "id": "QID15",
+          "text": "Studenten bewust maken van AI-ethiek\nHoe belangrijk vind je het om studenten te informeren over ethische aspecten van AI?",
+          "options": [
+            { "value": 0, "label": "Niet belangrijk" },
+            { "value": 1, "label": "Enigszins belangrijk" },
+            { "value": 2, "label": "Zeer belangrijk" }
+          ]
         }
       ]
     },
@@ -28,6 +46,24 @@
             { "value": 1, "label": "Ik heb enig idee voor welke doelen mijn gegevens gebruikt worden" },
             { "value": 2, "label": "Ik begrijp volledig hoe mijn gegevens worden verwerkt" }
           ]
+        },
+        {
+          "id": "QID21",
+          "text": "Toezicht op AI-uitvoering\nHoe vaak controleer je de output van AI-systemen voordat je deze gebruikt in je onderwijs?",
+          "options": [
+            { "value": 0, "label": "Nooit" },
+            { "value": 1, "label": "Soms" },
+            { "value": 2, "label": "Altijd" }
+          ]
+        },
+        {
+          "id": "QID22",
+          "text": "Menselijke interventie\nHoe gemakkelijk kun je ingrijpen als AI een fout maakt in een educatieve context?",
+          "options": [
+            { "value": 0, "label": "Niet mogelijk" },
+            { "value": 1, "label": "Soms mogelijk" },
+            { "value": 2, "label": "Altijd mogelijk" }
+          ]
         }
       ]
     },
@@ -42,6 +78,15 @@
             { "value": 0, "label": "Ik heb geen idee hoe generatieve AI kan helpen" },
             { "value": 1, "label": "Ik heb enig idee van de voor- en nadelen" },
             { "value": 2, "label": "Ik weet hoe ik AI optimaal kan benutten in mijn onderwijs" }
+          ]
+        },
+        {
+          "id": "QID26",
+          "text": "Uitlegbaarheid van AI\nHoe goed kun je uitleggen aan studenten hoe AI tot bepaalde adviezen of output komt?",
+          "options": [
+            { "value": 0, "label": "Ik kan dit niet uitleggen" },
+            { "value": 1, "label": "Ik kan het gedeeltelijk uitleggen" },
+            { "value": 2, "label": "Ik kan het volledig uitleggen" }
           ]
         }
       ]
@@ -67,6 +112,15 @@
             { "value": 1, "label": "Soms" },
             { "value": 2, "label": "Vaak" }
           ]
+        },
+        {
+          "id": "QID30",
+          "text": "AI voor differentiatie\nHoe vaak gebruik je AI om het onderwijs af te stemmen op individuele leerbehoeften?",
+          "options": [
+            { "value": 0, "label": "Nooit" },
+            { "value": 1, "label": "Soms" },
+            { "value": 2, "label": "Vaak" }
+          ]
         }
       ]
     },
@@ -81,6 +135,15 @@
             { "value": 0, "label": "Ik heb geen idee hoe de algoritmes werken" },
             { "value": 1, "label": "Ik heb enig idee hoe de algoritmes werken" },
             { "value": 2, "label": "Ik begrijp volledig hoe de algoritmes werken" }
+          ]
+        },
+        {
+          "id": "QID34",
+          "text": "Aanpassen van algoritmes\nHoe comfortabel ben je met het aanpassen of configureren van AI-algoritmes voor jouw onderwijsdoelen?",
+          "options": [
+            { "value": 0, "label": "Niet comfortabel" },
+            { "value": 1, "label": "Enigszins comfortabel" },
+            { "value": 2, "label": "Zeer comfortabel" }
           ]
         }
       ]
@@ -97,6 +160,15 @@
             { "value": 1, "label": "Ik heb enig idee van mogelijke bias" },
             { "value": 2, "label": "Ik weet welke bias mogelijk is en hoe deze te vermijden" }
           ]
+        },
+        {
+          "id": "QID39",
+          "text": "Inclusieve AI-toepassing\nHoe vaak pas je AI zodanig toe dat het alle studenten gelijk behandelt?",
+          "options": [
+            { "value": 0, "label": "Nooit" },
+            { "value": 1, "label": "Soms" },
+            { "value": 2, "label": "Altijd" }
+          ]
         }
       ]
     },
@@ -111,6 +183,15 @@
             { "value": 0, "label": "Ik heb geen idee" },
             { "value": 1, "label": "Ik heb enig idee" },
             { "value": 2, "label": "Ik begrijp volledig de milieu-impact" }
+          ]
+        },
+        {
+          "id": "QID44",
+          "text": "Maatschappelijke effecten\nHoe goed begrijp je de sociale gevolgen van het gebruik van AI in onderwijscontexten?",
+          "options": [
+            { "value": 0, "label": "Ik heb geen idee" },
+            { "value": 1, "label": "Ik heb enig idee" },
+            { "value": 2, "label": "Ik begrijp volledig de sociale effecten" }
           ]
         }
       ]
@@ -127,6 +208,15 @@
             { "value": 1, "label": "Ik evalueer soms" },
             { "value": 2, "label": "Ik evalueer vaak" }
           ]
+        },
+        {
+          "id": "QID49",
+          "text": "Verantwoording afleggen\nHoe vaak rapporteer je aan collega’s of management over de resultaten van AI-gebruik in je onderwijs?",
+          "options": [
+            { "value": 0, "label": "Nooit" },
+            { "value": 1, "label": "Soms" },
+            { "value": 2, "label": "Vaak" }
+          ]
         }
       ]
     },
@@ -136,11 +226,20 @@
       "questions": [
         {
           "id": "QID53",
-          "text": "Gebruik van AIMES-gegevens\nGa je akkoord met het gebruik van je gegevens voor onderzoek naar AI-maturiteit in het onderwijs?",
+          "text": "Gebruik van gegevens\nGa je akkoord met het gebruik van je gegevens voor onderzoek naar AI-maturiteit in het onderwijs?",
           "options": [
             { "value": 0, "label": "Ik ga niet akkoord" },
             { "value": 1, "label": "Ik ga akkoord" },
             { "value": 2, "label": "Ik ga akkoord en geef extra informatie over mijn instelling" }
+          ]
+        },
+        {
+          "id": "QID54",
+          "text": "Controle over gegevens\nHoe belangrijk vind je het dat je controle behoudt over je eigen gegevens bij het gebruik van AI?",
+          "options": [
+            { "value": 0, "label": "Niet belangrijk" },
+            { "value": 1, "label": "Enigszins belangrijk" },
+            { "value": 2, "label": "Zeer belangrijk" }
           ]
         }
       ]

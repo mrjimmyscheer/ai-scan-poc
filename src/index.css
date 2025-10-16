@@ -2,19 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
-
-.card-blur {
-  background-clip: padding-box;
+html { 
+  -webkit-font-smoothing: antialiased; 
+  -moz-osx-font-smoothing: grayscale; 
+  scroll-behavior: smooth; 
 }
 
-button { transition: transform .12s ease, box-shadow .12s ease; }
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
 
-:focus { outline: 3px solid rgba(99,102,241,0.2); outline-offset: 2px; }
+@keyframes float-slow-delay {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(12px); }
+}
 
-@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-  .safari-fix {
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-  }
+.animate-float-slow {
+  animation: float-slow 15s ease-in-out infinite;
+}
+
+.animate-float-slow-delay {
+  animation: float-slow-delay 18s ease-in-out infinite;
+}
+
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+button:focus {
+  outline: 3px solid rgba(99,102,241,0.3);
+  outline-offset: 2px;
+}
+
+.card-glass {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 1rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
 }
