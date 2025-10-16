@@ -12,14 +12,27 @@ export function computeDomainScores(domains, answers = {}, options = {}) {
 
   for (const d of domains) {
     const questions = d.questions || [];
+
     let weightedSum = 0;
     let weightTotal = 0;
     const items = [];
 
     for (const q of questions) {
+      if ((q.id && q.id === "QID53") || (q.text && /je akkoord met het gebruik van je gegevens voor onderzoek naar AI-maturiteit in het/i.test(q.text))) {
+        const raw = answers[q.id];
+        items.push({
+          id: q.id,
+          text: q.text,
+          rawAnswer: raw,
+          itemScore: null,
+          weight: 0,
+          explain: q.explain || ""
+        });
+        continue;
+      }
+
       const raw = answers[q.id];
       const norm = normalizeAnswerValue(raw);
-
       const weight = typeof q.weight === "number" ? q.weight : 1;
 
       if (norm === null) {
@@ -35,8 +48,8 @@ export function computeDomainScores(domains, answers = {}, options = {}) {
       }
 
       const opts = Array.isArray(q.options) ? q.options : [];
-      const minVal = opts.length ? Math.min(...opts.map(o => Number(o.value))) : 0;
-      const maxVal = opts.length ? Math.max(...opts.map(o => Number(o.value))) : 1;
+      const minVal = opts.length ? Math.min(...opts.map((o) => Number(o.value))) : 0;
+      const maxVal = opts.length ? Math.max(...opts.map((o) => Number(o.value))) : 1;
       const clamped = Math.min(maxVal, Math.max(minVal, Number(norm)));
 
       const denom = (maxVal - minVal) || 1;
@@ -53,21 +66,20 @@ export function computeDomainScores(domains, answers = {}, options = {}) {
         weight,
         explain: q.explain || ""
       });
-    } 
+    }
 
     const domainScore = weightTotal ? Math.round(weightedSum / weightTotal) : null;
-
     domainResults.push({
       id: d.id,
       title: d.title,
       score: domainScore,
       items
     });
-  } 
+  }
 
-  const validDomainScores = domainResults.map(d => d.score).filter(s => s !== null);
+  const validDomainScores = domainResults.map((d) => d.score).filter((s) => s !== null);
   const overall = validDomainScores.length
-    ? Math.round(validDomainScores.reduce((a,b)=>a+b,0) / validDomainScores.length)
+    ? Math.round(validDomainScores.reduce((a, b) => a + b, 0) / validDomainScores.length)
     : 0;
 
   let level = "Novice";
@@ -91,51 +103,40 @@ export function generateCsv(domainResults, overall, level) {
   const rows = [];
   rows.push(["Domain","Question ID","Question text","Answer","Item score (0-100)","Weight"].join(";"));
   for (const d of domainResults) {
-    for (const it of d.items) {
+    for (const it of d.items || []) {
       rows.push([
-        escapeSemicolon(d.title),
-        it.id,
-        escapeSemicolon(it.text),
-        it.rawAnswer === null || it.rawAnswer === undefined ? "" : String(it.rawAnswer),
+        d.title || "",
+        it.id || "",
+        (it.text || "").replace(/\n/g, " "),
+        String(it.rawAnswer || ""),
         it.itemScore === null ? "" : String(it.itemScore),
         String(it.weight || "")
       ].join(";"));
     }
   }
-  rows.push("");
-  rows.push(["Overall","", "", overall, level].join(";"));
   return rows.join("\n");
 }
 
-function escapeSemicolon(text="") {
-  return String(text).replace(/;/g, ",");
-}
 
 export function generateHeatmap(domainResults) {
-  return domainResults.map(d => ({
-    domainId: d.id,
-    domainTitle: d.title,
-    items: d.items.map(it => ({ id: it.id, text: it.text, score: it.itemScore }))
-  }));
-}
-
-export function weakestItems(domainResults, n = 5) {
   const all = [];
   for (const d of domainResults) {
-    for (const it of d.items) {
-      if (it.itemScore !== null && it.itemScore !== undefined) {
-        all.push({
-          domainId: d.id,
-          domainTitle: d.title,
-          id: it.id,
-          text: it.text,
-          score: it.itemScore,
-          weight: it.weight,
-          explain: it.explain
-        });
-      }
+    for (const it of d.items || []) {
+      all.push({
+        domainId: d.id,
+        domainTitle: d.title,
+        id: it.id,
+        text: it.text,
+        score: it.itemScore,
+        weight: it.weight,
+        explain: it.explain
+      });
     }
   }
-  all.sort((a,b)=> a.score - b.score);
-  return all.slice(0,n);
+  all.sort((a, b) => {
+    const as = a.score === null ? -1 : a.score;
+    const bs = b.score === null ? -1 : b.score;
+    return as - bs;
+  });
+  return all;
 }
