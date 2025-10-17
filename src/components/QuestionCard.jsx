@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-export default function QuestionCard({ question, selected, onAnswer }) {
+export default function QuestionCard({ question, selected, onAnswer, disabled }) {
   if (!question) return null;
 
   return (
@@ -26,13 +26,18 @@ export default function QuestionCard({ question, selected, onAnswer }) {
           return (
             <motion.button
               key={opt.value}
-              onClick={() => onAnswer(question.id, opt.value)}
+              onClick={() => !disabled && onAnswer(question.id, opt.value)}
+              disabled={disabled}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.12 }}
-              className={`flex items-center justify-between p-3 rounded-xl border ${isSelected ? "bg-indigo-600/90 border-indigo-500 shadow-lg" : "bg-white/2 border-white/6 hover:bg-white/5"} focus:outline-none focus:ring-2 focus:ring-indigo-400 btn-animated`}
+              className={`flex items-center justify-between p-3 rounded-xl border ${
+                isSelected
+                  ? "bg-indigo-600/90 border-indigo-500 shadow-lg"
+                  : "bg-white/2 border-white/6 hover:bg-white/5"
+              } ${disabled ? "opacity-50 cursor-not-allowed" : ""} focus:outline-none focus:ring-2 focus:ring-indigo-400 btn-animated`}              
               aria-pressed={isSelected}
             >
               <div className="text-left">

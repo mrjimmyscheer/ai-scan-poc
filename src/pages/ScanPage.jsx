@@ -90,6 +90,8 @@ export default function ScanPage() {
   const [answers, setAnswers] = useState({});
   const [sessionId, setSessionId] = useState(null);
   const [toast, setToast] = useState({ show: false, message: "" });
+  const [isBusy, setIsBusy] = useState(false);
+
 
   // Modals
   const [showKeyInput, setShowKeyInput] = useState(false);
@@ -141,12 +143,26 @@ export default function ScanPage() {
   }, [answers, sessionId]);
 
   function onAnswer(qid, value) {
+    if (isBusy) return; // als de app bezig is → niks doen
+    setIsBusy(true); // zet de app op ‘bezig’
+  
+    // antwoord opslaan
     setAnswers(prev => ({ ...prev, [qid]: value }));
+  
+    // kleine wachttijd zodat het antwoord goed opgeslagen is
     setTimeout(() => {
-      if (index < questions.length - 1) setIndex(i => i + 1);
-      else finishAndShowResults();
-    }, 160);
+      if (index < questions.length - 1) {
+        // ga naar volgende vraag
+        setIndex(i => i + 1);
+      } else {
+        // alle vragen klaar → toon resultaten
+        finishAndShowResults();
+      }
+  
+      setIsBusy(false); // klaar, klikken mag weer
+    }, 200);
   }
+  
 
   function discardSession() {
     setShowConfirmDelete(true);
@@ -303,7 +319,13 @@ export default function ScanPage() {
           <AnimatePresence mode="wait">
             <div key={currentQuestion ? currentQuestion.id : "done"}>
               {currentQuestion ? (
-                <QuestionCard question={currentQuestion} selected={answers[currentQuestion.id]} onAnswer={onAnswer} />
+                <QuestionCard
+                question={currentQuestion}
+                selected={answers[currentQuestion.id]}
+                onAnswer={onAnswer}
+                disabled={isBusy}
+              />
+              
               ) : (
                 <div className="text-center p-6 bg-white/5 rounded-lg text-slate-200 font-medium">Geen vragen gevonden.</div>
               )}
