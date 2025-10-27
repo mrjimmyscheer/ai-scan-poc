@@ -80,7 +80,6 @@ function Modal({ show, title, children, onClose, actions }) {
 }
 
 export default function ScanPage() {
-  // Flatten questions
   const domains = surveyJson.domains || [];
   const questions = domains.flatMap(d =>
     (d.questions || []).map(q => ({ ...q, domainId: d.id, domainTitle: d.title }))
@@ -104,7 +103,7 @@ export default function ScanPage() {
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
-  // Load or create session
+  // session maken of laden
   useEffect(() => {
     const savedSessions = Object.keys(localStorage).filter(k => k.startsWith(STORAGE_KEY_PREFIX));
     if (savedSessions.length) {
@@ -338,8 +337,8 @@ export default function ScanPage() {
       </button>
     </div>
 
-    {/* Tip */}
-    <div className="text-sm text-indigo-200 text-center flex-1 px-2">
+    {/* Tip */} 
+    <div className="text-sm text-indigo-200 text-center flex-1 px-2"> {/* <-- kunnen we altijd verwijderen */}
       Tip: kies het antwoord dat het meest van toepassing is.
     </div>
 

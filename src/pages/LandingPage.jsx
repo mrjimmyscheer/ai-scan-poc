@@ -20,19 +20,10 @@ export default function LandingPage() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center text-white">
-      
-      {/* Silk Background */}
       <div className="absolute inset-0 z-0 w-full h-full">
-        <Silk
-          speed={5}
-          scale={1.2}
-          color="#7B3F99"
-          noiseIntensity={1.5}
-          rotation={0}
-        />
+        <Silk speed={5} scale={1.2} color="#7B3F99" noiseIntensity={1.5} rotation={0}/>
       </div>
 
-      {/* Main Content */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -44,7 +35,7 @@ export default function LandingPage() {
         </h1>
 
         <p className="mt-2 text-base md:text-lg text-purple-100/80 drop-shadow-sm max-w-lg">
-          Een korte, praktische scan die inzicht geeft in kennis, toepassing en governance rondom AI — speciaal voor docenten en studenten.
+          Een korte, praktische scan die inzicht geeft in kennis, toepassing en governance rondom AI, speciaal voor docenten en studenten.
         </p>
 
         <div className="mt-6 flex flex-col md:flex-row gap-4 justify-center">
@@ -72,7 +63,7 @@ export default function LandingPage() {
         <ul className="mt-4 text-xs md:text-sm text-purple-100/60 space-y-1 max-w-xs">
           <li>• Duur: ~5–8 minuten — één vraag per keer.</li>
           <li>• Resultaat: maturity-niveau + aanbevelingen.</li>
-          <li>• Privacy: data blijft lokaal in de browser.</li>
+          <li className="font-bold">• Privacy: data blijft lokaal in de browser.</li>
         </ul>
       </motion.div>
     </div>
