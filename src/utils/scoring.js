@@ -98,7 +98,6 @@ export function computeDomainScores(domains, answers = {}, options = {}) {
   return result;
 }
 
-
 export function generateCsv(domainResults, overall, level) {
   const rows = [];
   rows.push(["Domain","Question ID","Question text","Answer","Item score (0-100)","Weight"].join(";"));
@@ -116,7 +115,6 @@ export function generateCsv(domainResults, overall, level) {
   }
   return rows.join("\n");
 }
-
 
 export function generateHeatmap(domainResults) {
   const all = [];

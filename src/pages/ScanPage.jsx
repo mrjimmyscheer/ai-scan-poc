@@ -15,7 +15,7 @@ function Toast({ message, show, onClose }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
           transition={{ duration: 0.25 }}
-          className="fixed bottom-6 right-6 z-50 bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-2xl shadow-xl flex items-center justify-between gap-4 border border-white/20"
+          className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-2xl shadow-xl flex items-center justify-between gap-4"
         >
           <span className="font-medium">{message}</span>
           <button
@@ -48,11 +48,7 @@ function Modal({ show, title, children, onClose, actions }) {
             className="bg-slate-900/95 backdrop-blur-md border border-white/10 p-6 rounded-3xl shadow-2xl w-full max-w-md flex flex-col"
           >
             <h2 className="text-xl font-semibold text-indigo-400 mb-4">{title}</h2>
-
-            <div className="flex-1 text-slate-200 mb-6 space-y-4">
-              {children}
-            </div>
-
+            <div className="flex-1 text-slate-200 mb-6 space-y-4">{children}</div>
             <div className="flex justify-end gap-3">
               <button
                 onClick={onClose}
@@ -84,17 +80,21 @@ function Modal({ show, title, children, onClose, actions }) {
 }
 
 export default function ScanPage() {
+  // Flatten questions
   const domains = surveyJson.domains || [];
-  const questions = domains.flatMap(d => (d.questions || []).map(q => ({ ...q, domainId: d.id, domainTitle: d.title })));
+  const questions = domains.flatMap(d =>
+    (d.questions || []).map(q => ({ ...q, domainId: d.id, domainTitle: d.title }))
+  );
+
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [sessionId, setSessionId] = useState(null);
   const [toast, setToast] = useState({ show: false, message: "" });
-
-  // Modals
   const [showKeyInput, setShowKeyInput] = useState(false);
   const [keyInput, setKeyInput] = useState("");
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const mounted = useRef(false);
   const navigate = useNavigate();
@@ -104,6 +104,7 @@ export default function ScanPage() {
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
+  // Load or create session
   useEffect(() => {
     const savedSessions = Object.keys(localStorage).filter(k => k.startsWith(STORAGE_KEY_PREFIX));
     if (savedSessions.length) {
@@ -192,12 +193,11 @@ export default function ScanPage() {
   const currentQuestion = questions[index];
 
   return (
-    <div className="min-h-screen py-8 px-4 bg-slate-900 text-slate-100 relative">
-
+    <div className="min-h-screen py-6 px-4 bg-gradient-to-b from-[#4b0e5e] via-[#61177c] to-[#8b3da6] text-white flex flex-col items-center">
       {/* Toast */}
       <Toast message={toast.message} show={toast.show} onClose={() => setToast({ show: false, message: "" })} />
 
-      {/* Key input modal */}
+      {/* Modals */}
       <Modal
         show={showKeyInput}
         title="Laad een bestaande sessie"
@@ -207,7 +207,6 @@ export default function ScanPage() {
           { label: "Laad sessie", onClick: handleResume, variant: "primary" }
         ]}
       >
-        {/* Input voor key */}
         <input
           type="text"
           value={keyInput}
@@ -215,50 +214,6 @@ export default function ScanPage() {
           placeholder="Sessie key"
           className="w-full px-4 py-2 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
-
-        {/* Opslag keys lijst */}
-        <div className="mt-4 flex flex-col gap-2 max-h-48 overflow-y-auto">
-          {Object.keys(localStorage)
-            .filter(k => k.startsWith(STORAGE_KEY_PREFIX))
-            .sort()
-            .reverse()
-            .map((key) => {
-              const shortKey = key.replace(STORAGE_KEY_PREFIX, "");
-              const isActive = shortKey === sessionId;
-              return (
-                <div
-                  key={key}
-                  className={`flex justify-between items-center px-3 py-2 rounded-xl text-slate-200 transition cursor-pointer ${
-                    isActive ? "bg-indigo-600/40" : "bg-slate-800/70 hover:bg-slate-700"
-                  }`}
-                >
-                  <span className="truncate">{shortKey}{isActive && " (actief)"}</span>
-                  <div className="flex gap-2">
-                    <button
-                      className="px-3 py-1 bg-indigo-500 hover:bg-indigo-600 rounded-lg text-white text-sm font-medium transition"
-                      onClick={() => {
-                        navigator.clipboard.writeText(shortKey);
-                        showToast("Key gekopieerd!");
-                      }}
-                    >
-                      Kopieer
-                    </button>
-                    <button
-                      className="px-3 py-1 bg-red-600 hover:bg-red-700 rounded-lg text-white text-sm font-medium transition"
-                      onClick={() => {
-                        localStorage.removeItem(key);
-                        if (isActive) setSessionId(null);
-                        showToast("Sessie verwijderd!");
-                        setKeyInput(""); // reset input if deleted
-                      }}
-                    >
-                      Verwijder
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-        </div>
       </Modal>
 
       <Modal
@@ -270,59 +225,134 @@ export default function ScanPage() {
           { label: "Verwijder", onClick: confirmDeleteSession, variant: "danger" }
         ]}
       >
-        <p className="text-slate-300">
-          Deze sessie wordt verwijderd en kan niet ongedaan gemaakt worden.
-        </p>
+        <p className="text-slate -300">Deze sessie wordt verwijderd en kan niet ongedaan gemaakt worden. </p> 
       </Modal>
 
-      <div className="max-w-4xl mx-auto">
+  {/* Header */}
+  <div className="max-w-4xl w-full mb-6 flex items-center justify-between px-2">
+    {/* Title */}
+    <h1 className="text-3xl font-extrabold text-indigo-300">AI Scan</h1>
 
-        {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-extrabold text-indigo-400">AI-scan</h1>
-            <div className="text-sm text-slate-400 mt-1">Sessie: {sessionId}</div>
-          </div>
-          <div className="flex gap-2">
-            <button onClick={() => navigate("/")} className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium shadow">Home</button>
-            <button onClick={resumeDifferent} className="px-4 py-2 border border-indigo-400 text-indigo-200 rounded-lg hover:bg-indigo-500/20">Laad sessie</button>
-            <button onClick={discardSession} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow">Verwijder sessie</button>
-          </div>
-        </div>
-
-        {/* Progress */}
-        <div className="mb-6">
-          <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full transition-all duration-300" style={{ width: `${progress}%`, background: "linear-gradient(90deg,#6366f1,#8b5cf6)" }} />
-          </div>
-          <div className="text-xs text-slate-400 mt-1">{index + 1} / {questions.length}</div>
-        </div>
-
-        {/* Question */}
-        <main className="py-6">
-          <AnimatePresence mode="wait">
-            <div key={currentQuestion ? currentQuestion.id : "done"}>
-              {currentQuestion ? (
-                <QuestionCard question={currentQuestion} selected={answers[currentQuestion.id]} onAnswer={onAnswer} />
-              ) : (
-                <div className="text-center p-6 bg-white/5 rounded-lg text-slate-200 font-medium">Geen vragen gevonden.</div>
-              )}
-            </div>
-          </AnimatePresence>
-        </main>
-
-        {/* Footer */}
-        <footer className="mt-8 flex flex-col md:flex-row items-center justify-between gap-3">
-          <div className="flex gap-2">
-            <button onClick={() => setIndex(i => Math.max(0, i - 1))} disabled={index === 0} className="px-5 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white font-semibold shadow">Terug</button>
-          </div>
-          <div className="text-sm text-slate-400 text-center md:text-left">Tip: kies het antwoord dat het meest van toepassing is.</div>
-          <div className="flex gap-2">
-            <button onClick={finishAndShowResults} className="px-5 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 shadow-md text-white font-semibold hover:scale-105 transition-transform">Klaar</button>
-          </div>
-        </footer>
-
-      </div>
+    {/* Desktop buttons */}
+    <div className="hidden sm:flex gap-2">
+      <button
+        onClick={() => navigate("/")}
+        className="px-4 py-2 rounded-2xl bg-gradient-to-r from-[#61177c] via-[#7c2ca5] to-[#9b4ddb] text-white font-medium shadow-lg hover:brightness-110 transition-all"
+      >
+        Home
+      </button>
+      <button
+        onClick={resumeDifferent}
+        className="px-4 py-2 rounded-2xl border border-[#b49be1] text-[#e0d7ff] hover:bg-[#7c2ca5]/20 transition-all"
+      >
+        Laad sessie
+      </button>
+      <button
+        onClick={discardSession}
+        className="px-5 py-2 rounded-3xl bg-red-500 hover:bg-red-600 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105 font-semibold"
+      >
+        Verwijder sessie
+      </button>
     </div>
-  );
+
+    {/* Mobile dropdown */}
+    <div className="sm:hidden relative">
+      <button
+        className="px-4 py-2 bg-[#61177c] rounded-2xl text-white font-medium shadow-lg hover:brightness-110 transition-all"
+        onClick={() => setShowDropdown(prev => !prev)}
+      >
+        Menu ▼
+      </button>
+
+      {showDropdown && (
+        <div className="absolute right-0 mt-2 w-44 bg-slate-900/90 backdrop-blur-md border border-white/10 rounded-xl shadow-lg flex flex-col z-50">
+          <button
+            onClick={() => navigate("/")}
+            className="px-4 py-2 text-left hover:bg-indigo-600/50 transition-colors"
+          >
+            Home
+          </button>
+          <button
+            onClick={resumeDifferent}
+            className="px-4 py-2 text-left hover:bg-indigo-600/50 transition-colors"
+          >
+            Laad sessie
+          </button>
+          <button
+            onClick={discardSession}
+            className="px-4 py-2 text-left text-red-400 hover:bg-red-600/30 transition-colors"
+          >
+            Verwijder sessie
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+
+  {/* Progress */}
+  <div className="max-w-2xl w-full mb-6 px-2">
+    <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
+      <div className="h-full transition-all duration-300 rounded-full" style={{ width: `${progress}%`, background: "linear-gradient(90deg, #61177c, #7c2ca5, #9b4ddb)" }} />
+    </div>
+    <div className="text-xs text-indigo-200 mt-1 text-right">{index + 1} / {questions.length}</div>
+  </div>
+
+  {/* Question */}
+  <main className="flex-1 w-full max-w-2xl flex flex-col items-center">
+    <AnimatePresence mode="wait">
+      {currentQuestion ? (
+        <motion.div
+          key={currentQuestion.id}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -50 }}
+          transition={{ duration: 0.3 }}
+        >
+          <QuestionCard question={currentQuestion} selected={answers[currentQuestion.id]} onAnswer={onAnswer} />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="done"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="text-center p-6 text-purple-200 font-medium"
+        >
+          Geen vragen gevonden.
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </main>
+
+  {/* Footer */}
+  <footer className="mt-8 flex flex-row items-center justify-between max-w-2xl w-full gap-4">
+    {/* Left button */}
+    <div className="min-w-[120px]">
+      <button
+        onClick={() => setIndex(i => Math.max(0, i - 1))}
+        disabled={index === 0}
+        className="px-6 py-2 rounded-2xl bg-gradient-to-r from-[#61177c] via-[#7c2ca5] to-[#9b4ddb] shadow-lg text-white font-semibold hover:scale-105 transition-transform text-sm sm:text-base max-w-xs w-full"
+      >
+        Terug
+      </button>
+    </div>
+
+    {/* Tip */}
+    <div className="text-sm text-indigo-200 text-center flex-1 px-2">
+      Tip: kies het antwoord dat het meest van toepassing is.
+    </div>
+
+    {/* Right button */}
+    <div className="min-w-[120px]">
+      <button
+        onClick={finishAndShowResults}
+        className="px-6 py-2 rounded-2xl bg-gradient-to-r from-[#61177c] via-[#7c2ca5] to-[#9b4ddb] shadow-lg text-white font-semibold hover:scale-105 transition-transform text-sm sm:text-base max-w-xs w-full"
+      >
+        Klaar
+      </button>
+    </div>
+  </footer>
+</div>
+);
 }

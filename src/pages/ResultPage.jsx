@@ -73,27 +73,27 @@ function makeBarOptions() {
   };
 }
 
-async function captureFullElement(el, scale = 3, fitWidth = true) {
-  const origWidth = el.style.width;
-  const origHeight = el.style.height;
+// async function captureFullElement(el, scale = 3, fitWidth = true) {
+//   const origWidth = el.style.width;
+//   const origHeight = el.style.height;
 
-  if (fitWidth) {
-    el.style.width = "1000px"; 
-  }
-  el.style.height = "auto";
+//   if (fitWidth) {
+//     el.style.width = "1000px"; 
+//   }
+//   el.style.height = "auto";
 
-  const canvas = await html2canvas(el, {
-    scale,
-    useCORS: true,
-    backgroundColor: "#ffffff",
-    scrollY: -window.scrollY,
-  });
+//   const canvas = await html2canvas(el, {
+//     scale,
+//     useCORS: true,
+//     backgroundColor: "#ffffff",
+//     scrollY: -window.scrollY,
+//   });
 
-  el.style.width = origWidth || "";
-  el.style.height = origHeight || "";
+//   el.style.width = origWidth || "";
+//   el.style.height = origHeight || "";
 
-  return canvas;
-}
+//   return canvas;
+// }
 
 export default function ResultPage({ location }) {
   const incomingState = (location && location.state) || {};
@@ -152,12 +152,14 @@ export default function ResultPage({ location }) {
     pdf.text("Raport van: https://websiteurl.com/", pageW / 2, pageH / 2 + 10, { align: "center" });
     pdf.text(`Date: ${new Date().toLocaleDateString()}`, pageW / 2, pageH / 2 + 20, { align: "center" });
 
-    if (barRef.current) {
-      const chartCanvas = barRef.current.toBase64Image();
-      const wmm = pageW - 20; 
-      const hmm = (barRef.current.chart.height / barRef.current.chart.width) * wmm;
+    const chartInstance = barRef.current?.chart; 
+    if (chartInstance) {
+      const chartCanvas = chartInstance.toBase64Image();
+      const chartWidthMM = pageW - 20; 
+      const chartHeightMM = (chartInstance.height / chartInstance.width) * chartWidthMM;
+
       pdf.addPage();
-      pdf.addImage(chartCanvas, "PNG", 10, 10, wmm, hmm);
+      pdf.addImage(chartCanvas, "PNG", 10, 10, chartWidthMM, chartHeightMM);
       pdf.setFontSize(9);
       pdf.setTextColor(100);
       pdf.text("© itsjimmys 2025", pageW - 40, pageH - 10);
@@ -169,7 +171,7 @@ export default function ResultPage({ location }) {
         scale: 2,
         useCORS: true,
         backgroundColor: "#ffffff",
-        scrollX: -heatEl.scrollLeft, 
+        scrollX: -heatEl.scrollLeft,
       });
 
       const pxToMm = (px) => (px * 25.4) / 96;

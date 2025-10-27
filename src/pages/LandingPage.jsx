@@ -1,81 +1,80 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import Silk from '../components/Silk';
+
+const STORAGE_KEY_PREFIX = "ai-scan-session-";
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const [hasResults, setHasResults] = useState(false);
+
+  useEffect(() => {
+    const sessions = Object.keys(localStorage)
+      .filter(k => k.startsWith(STORAGE_KEY_PREFIX))
+      .map(k => JSON.parse(localStorage.getItem(k)));
+    
+    const anyAnswers = sessions.some(s => s?.answers && Object.keys(s.answers).length > 0);
+    setHasResults(anyAnswers);
+  }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-16 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-slate-50 overflow-hidden relative">
+    <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center text-white">
+      
+      {/* Silk Background */}
+      <div className="absolute inset-0 z-0 w-full h-full">
+        <Silk
+          speed={5}
+          scale={1.2}
+          color="#7B3F99"
+          noiseIntensity={1.5}
+          rotation={0}
+        />
+      </div>
 
-      <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-indigo-600/20 blur-3xl animate-float-slow" />
-      <div className="absolute bottom-0 right-1/3 w-80 h-80 rounded-full bg-teal-500/20 blur-3xl animate-float-slow-delay" />
+      {/* Main Content */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-10 flex flex-col items-center gap-6 text-center px-6"
+      >
+        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-purple-100 drop-shadow-lg">
+          AI Maturity Scan
+        </h1>
 
-      <div className="relative max-w-4xl w-full rounded-3xl p-10 bg-slate-900/60 backdrop-blur-xl shadow-2xl overflow-hidden border border-white/5 flex flex-col md:flex-row items-center gap-8">
+        <p className="mt-2 text-base md:text-lg text-purple-100/80 drop-shadow-sm max-w-lg">
+          Een korte, praktische scan die inzicht geeft in kennis, toepassing en governance rondom AI — speciaal voor docenten en studenten.
+        </p>
 
-        <div className="flex-1">
-          <motion.h1
-            initial={{ y: -10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl font-extrabold tracking-tight text-white"
+        <div className="mt-6 flex flex-col md:flex-row gap-4 justify-center">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => navigate("/scan")}
+            className="px-10 py-3 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-500 to-purple-400 text-white font-semibold shadow-lg hover:brightness-110 transition-all"
           >
-            AI Maturity Scan
-          </motion.h1>
+            Start Scan 🚀
+          </motion.button>
 
-          <motion.p
-            initial={{ y: 6, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.15, duration: 0.6 }}
-            className="mt-4 text-slate-300 text-lg"
-          >
-            Een korte, praktische scan die inzicht geeft in kennis, toepassing en governance rondom AI — speciaal voor docenten en studenten.
-          </motion.p>
-
-          <div className="mt-8 flex flex-wrap gap-4">
+          {hasResults && (
             <motion.button
-              onClick={() => navigate("/scan")}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
-              className="relative px-8 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-semibold shadow-lg hover:brightness-110 transition-all"
-            >
-              Start de scan 🚀
-            </motion.button>
-
-            <motion.button
               onClick={() => navigate("/results")}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-              className="px-8 py-3 rounded-2xl border border-slate-600 text-slate-100 bg-transparent hover:bg-white/10 transition-all"
+              className="px-10 py-3 rounded-2xl border-2 border-purple-300 text-purple-100 hover:bg-purple-700/20 transition-all"
             >
-              Bekijk resultaten
+              View Results
             </motion.button>
-          </div>
-
-          <ul className="mt-6 text-sm text-slate-400 space-y-2 leading-relaxed">
-            <li>• Duur: ~5–8 minuten — één vraag per keer, gefocust.</li>
-            <li>• Resultaat: duidelijk maturity-niveau + aanbevelingen.</li>
-            <li>• Privacy: data blijft lokaal in je browser.</li>
-          </ul>
+          )}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex-1 hidden md:block"
-        >
-          <div className="p-6 rounded-2xl bg-slate-800/40 border border-white/5 shadow-lg">
-            <h3 className="font-semibold mb-3 text-lg text-white">Wat meten we?</h3>
-            <ol className="list-decimal list-inside text-slate-300 space-y-2">
-              <li>Kennis van AI-concepten</li>
-              <li>Toepassing in onderwijs of onderzoek</li>
-              <li>Ethische & organisatorische bewustheid</li>
-              <li>Critisch beoordelingsvermogen</li>
-            </ol>
-          </div>
-        </motion.div>
-      </div>
+        <ul className="mt-4 text-xs md:text-sm text-purple-100/60 space-y-1 max-w-xs">
+          <li>• Duur: ~5–8 minuten — één vraag per keer.</li>
+          <li>• Resultaat: maturity-niveau + aanbevelingen.</li>
+          <li>• Privacy: data blijft lokaal in de browser.</li>
+        </ul>
+      </motion.div>
     </div>
   );
 }
