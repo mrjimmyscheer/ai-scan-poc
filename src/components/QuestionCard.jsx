@@ -55,6 +55,6 @@ export default function QuestionCard({ question, selected, onAnswer }) {
           );
         })}
       </div>
-    </motion.div>
+    </div>
   );
 }
