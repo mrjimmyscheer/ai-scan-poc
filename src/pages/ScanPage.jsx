@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import Modal from "@/components/Modal";
 import Toast from "@/components/Toast";
-import { Menu } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 const STORAGE_KEY_PREFIX = "ai-scan-session-";
 
@@ -157,135 +157,134 @@ export default function ScanPage() {
         <p>Deze sessie wordt verwijderd en kan niet ongedaan gemaakt worden. </p> 
       </Modal>
 
-  {/* Header */}
-  <div className="max-w-4xl w-full mb-6 flex items-center justify-between px-2">
-    {/* Title */}
-    <h1 className="text-3xl font-extrabold text-primary">AI Scan</h1>
+      {/* Header */}
+      <div className="max-w-4xl w-full mb-6 flex items-center justify-between px-2">
+        {/* Title */}
+        <h1 className="text-3xl font-extrabold text-primary">AI Scan</h1>
 
-    {/* Desktop buttons */}
-    <div className="hidden sm:flex gap-2">
-      <Button
-        onClick={() => navigate("/")}
-      >
-        Home
-      </Button>
-      <Button
-        onClick={resumeDifferent}
-        variant="outline"
-      >
-        Laad sessie
-      </Button>
-      <Button
-        onClick={discardSession}
-        variant="destructive"
-      >
-        Verwijder sessie
-      </Button>
-    </div>
-
-    {/* Mobile dropdown */}
-    <div className="sm:hidden relative">
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => setShowDropdown(prev => !prev)}
-      >
-        <Menu />
-      </Button>
-
-      {showDropdown && (
-        <div className="absolute right-0 mt-2 w-44 bg-card/90 backdrop-blur-md border rounded-xl shadow-lg flex flex-col z-50">
+        {/* Desktop buttons */}
+        <div className="hidden sm:flex gap-2">
           <Button
-            onClick={() => { navigate("/"); setShowDropdown(false); }}
-            variant="ghost"
-            className="justify-start"
+            onClick={() => navigate("/")}
           >
             Home
           </Button>
           <Button
-            onClick={() => { resumeDifferent(); setShowDropdown(false); }}
-            variant="ghost"
-            className="justify-start"
+            onClick={resumeDifferent}
+            variant="outline"
           >
             Laad sessie
           </Button>
           <Button
-            onClick={() => { discardSession(); setShowDropdown(false); }}
-            variant="ghost"
-            className="justify-start text-destructive"
+            onClick={discardSession}
+            variant="destructive"
           >
             Verwijder sessie
           </Button>
         </div>
-      )}
-    </div>
-  </div>
 
-  {/* Progress */}
-  <div className="max-w-2xl w-full mb-6 px-2">
-    <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
-      <div className="h-full transition-all duration-300 rounded-full" style={{ width: `${progress}%`, background: "linear-gradient(90deg, #61177c, #7c2ca5, #9b4ddb)" }} />
-    </div>
-    <div className="text-xs text-indigo-200 mt-1 text-right">{index + 1} / {questions.length}</div>
-  </div>
+        {/* Mobile dropdown */}
+        <div className="sm:hidden relative">
+          <Button
+            variant="secondary"
+            onClick={() => setShowDropdown(prev => !prev)}
+          >
+            Menu <ChevronDown className="h-4 w-4 ml-2" />
+          </Button>
 
-  {/* Question */}
-  <main className="flex-1 w-full max-w-2xl flex flex-col items-center">
-    <AnimatePresence mode="wait">
-      {currentQuestion ? (
-        <motion.div
-          key={currentQuestion.id}
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -50 }}
-          transition={{ duration: 0.3 }}
-        >
-          <QuestionCard question={currentQuestion} selected={answers[currentQuestion.id]} onAnswer={onAnswer} />
-        </motion.div>
-      ) : (
-        <motion.div
-          key="done"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="text-center p-6 text-purple-200 font-medium"
-        >
-          Geen vragen gevonden.
-        </motion.div>
-      )}
-    </AnimatePresence>
-  </main>
+          {showDropdown && (
+            <div className="absolute right-0 mt-2 w-44 bg-card/90 backdrop-blur-md border rounded-xl shadow-lg flex flex-col z-50">
+              <Button
+                onClick={() => { navigate("/"); setShowDropdown(false); }}
+                variant="ghost"
+                className="justify-start"
+              >
+                Home
+              </Button>
+              <Button
+                onClick={() => { resumeDifferent(); setShowDropdown(false); }}
+                variant="ghost"
+                className="justify-start"
+              >
+                Laad sessie
+              </Button>
+              <Button
+                onClick={() => { discardSession(); setShowDropdown(false); }}
+                variant="ghost"
+                className="justify-start text-destructive"
+              >
+                Verwijder sessie
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
 
-  {/* Footer */}
-  <footer className="mt-8 flex flex-row items-center justify-between max-w-2xl w-full gap-4">
-    {/* Left button */}
-    <div className="min-w-[120px]">
-      <Button
-        onClick={() => setIndex(i => Math.max(0, i - 1))}
-        disabled={index === 0}
-        className="w-full"
-        variant="outline"
-      >
-        Terug
-      </Button>
-    </div>
+      {/* Progress */}
+      <div className="max-w-2xl w-full mb-6 px-2">
+        <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
+          <div className="h-full transition-all duration-300 rounded-full" style={{ width: `${progress}%`, background: "linear-gradient(90deg, #61177c, #7c2ca5, #9b4ddb)" }} />
+        </div>
+        <div className="text-xs text-indigo-200 mt-1 text-right">{index + 1} / {questions.length}</div>
+      </div>
 
-    {/* Tip */} 
-    <div className="text-sm text-indigo-200 text-center flex-1 px-2"> {/* <-- kunnen we altijd verwijderen */}
-      Tip: kies het antwoord dat het meest van toepassing is.
-    </div>
+      {/* Question */}
+      <main className="flex-1 w-full max-w-2xl flex flex-col items-center">
+        <AnimatePresence mode="wait">
+          {currentQuestion ? (
+            <motion.div
+              key={currentQuestion.id}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.3 }}
+            >
+              <QuestionCard question={currentQuestion} selected={answers[currentQuestion.id]} onAnswer={onAnswer} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="done"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="text-center p-6 text-purple-200 font-medium"
+            >
+              Geen vragen gevonden.
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
 
-    {/* Right button */}
-    <div className="min-w-[120px]">
-      <Button
-        onClick={finishAndShowResults}
-        className="w-full"
-      >
-        Klaar
-      </Button>
+      {/* Footer */}
+      <footer className="mt-8 flex flex-row items-center justify-between max-w-2xl w-full gap-4">
+        {/* Left button */}
+        <div className="min-w-[120px]">
+          <Button
+            onClick={() => setIndex(i => Math.max(0, i - 1))}
+            disabled={index === 0}
+            className="w-full"
+            variant="outline"
+          >
+            Terug
+          </Button>
+        </div>
+
+        {/* Tip */} 
+        <div className="text-sm text-indigo-200 text-center flex-1 px-2"> {/* <-- kunnen we altijd verwijderen */}
+          Tip: kies het antwoord dat het meest van toepassing is.
+        </div>
+
+        {/* Right button */}
+        <div className="min-w-[120px]">
+          <Button
+            onClick={finishAndShowResults}
+            className="w-full"
+          >
+            Klaar
+          </Button>
+        </div>
+      </footer>
     </div>
-  </footer>
-</div>
-);
+  );
 }
