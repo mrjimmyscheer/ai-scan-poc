@@ -26,6 +26,10 @@ html {
   animation: float-slow-delay 18s ease-in-out infinite;
 }
 
+.will-change-transform-opacity {
+  will-change: transform, opacity;
+}
+
 button {
   transition: all 0.2s ease-in-out;
 }

@@ -238,6 +238,8 @@ export default function ScanPage() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.3 }}
+              layout // Add layout prop
+              className="will-change-transform-opacity"
             >
               <QuestionCard question={currentQuestion} selected={answers[currentQuestion.id]} onAnswer={onAnswer} />
             </motion.div>
