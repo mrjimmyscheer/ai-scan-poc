@@ -5,11 +5,7 @@ export default function QuestionCard({ question, selected, onAnswer }) {
   if (!question) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10, scale: 0.995 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -6, scale: 0.995 }}
-      transition={{ duration: 0.18 }}
+    <div
       className="w-full flex flex-col gap-6 bg-card/70 rounded-3xl p-6 backdrop-blur-md shadow-lg"
       role="region"
       aria-labelledby={`q-${question.id}`}
