@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Silk from '../components/Silk';
+import { Button } from "@/components/ui/Button";
 
 const STORAGE_KEY_PREFIX = "ai-scan-session-";
 
@@ -21,7 +22,8 @@ export default function LandingPage() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden flex items-center justify-center text-white">
       <div className="absolute inset-0 z-0 w-full h-full">
-        <Silk speed={5} scale={1.2} color="#7B3F99" noiseIntensity={1.5} rotation={0}/>
+        {/* The color #a366ff is the hex equivalent of the dark theme's --chart-4 variable (hsl(280, 65%, 60%)) */}
+        <Silk speed={5} scale={1.2} color="#a366ff" noiseIntensity={1.5} rotation={0}/>
       </div>
 
       <motion.div
@@ -39,24 +41,18 @@ export default function LandingPage() {
         </p>
 
         <div className="mt-6 flex flex-col md:flex-row gap-4 justify-center">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => navigate("/scan")}
-            className="px-10 py-3 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-500 to-purple-400 text-white font-semibold shadow-lg hover:brightness-110 transition-all"
-          >
-            Start Scan 🚀
-          </motion.button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+            <Button onClick={() => navigate("/scan")} size="lg">
+              Start Scan 🚀
+            </Button>
+          </motion.div>
 
           {hasResults && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => navigate("/results")}
-              className="px-10 py-3 rounded-2xl border-2 border-purple-300 text-purple-100 hover:bg-purple-700/20 transition-all"
-            >
-              View Results
-            </motion.button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+              <Button onClick={() => navigate("/results")} variant="outline" size="lg">
+                View Results
+              </Button>
+            </motion.div>
           )}
         </div>
 

@@ -4,10 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 
-const tailwindScript = document.createElement("script");
-tailwindScript.src = "https://cdn.tailwindcss.com";
-document.head.appendChild(tailwindScript);
-
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
