@@ -9,27 +9,94 @@
           "id": "QID13",
           "text": "Informatie opzoeken over AI-veiligheid\nHoe vaak zoek je informatie over de veilige toepassing van generatieve AI in je onderwijs?",
           "options": [
-            { "value": 0, "label": "Nooit" },
-            { "value": 1, "label": "Soms" },
-            { "value": 2, "label": "Vaak" }
-          ]
+            {
+              "value": 0,
+              "label": "Nooit",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Soms",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Vaak",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID14",
           "text": "Studenten begeleiden bij AI-gebruik\nHoe vaak begeleid je studenten bij het verantwoord gebruik van generatieve AI?",
           "options": [
-            { "value": 0, "label": "Nooit" },
-            { "value": 1, "label": "Soms" },
-            { "value": 2, "label": "Vaak" }
-          ]
+            {
+              "value": 0,
+              "label": "Nooit",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Soms",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Vaak",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID15",
           "text": "Studenten bewust maken van AI-ethiek\nHoe belangrijk vind je het om studenten te informeren over ethische aspecten van AI?",
           "options": [
-            { "value": 0, "label": "Niet belangrijk" },
-            { "value": 1, "label": "Enigszins belangrijk" },
-            { "value": 2, "label": "Zeer belangrijk" }
+            {
+              "value": 0,
+              "label": "Niet belangrijk",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Enigszins belangrijk",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Zeer belangrijk",
+              "score": 2
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "weight": 1,
+      "recommendations": [
+        {
+          "type": "low",
+          "threshold": 40,
+          "advice": [
+            "Volg een korte workshop over AI-gebruik door studenten en bespreek voorbeelden van verantwoord gebruik in jouw les.",
+            "Lees meer over AI-geletterdheid bij studenten: https://www.surf.nl/ai-in-het-onderwijs",
+            "Ontwerp een mini-les waarin studenten reflecteren op hun eigen AI-gebruik."
+          ]
+        },
+        {
+          "type": "mid",
+          "threshold": 70,
+          "advice": [
+            "Integreer AI-ethiek in opdrachten. Laat studenten bespreken hoe AI hun leerproces beïnvloedt.",
+            "Gebruik tools zoals ChatGPT als voorbeeld, en bespreek de voor- en nadelen in kleine groepen."
+          ]
+        },
+        {
+          "type": "high",
+          "threshold": 90,
+          "advice": [
+            "Je begeleidt studenten al goed! Overweeg om jouw aanpak te delen met collega’s via een workshop of artikel.",
+            "Organiseer een studentendialoog over verantwoord AI-gebruik om bewustwording te vergroten."
           ]
         }
       ]
@@ -42,27 +109,92 @@
           "id": "QID20",
           "text": "Begrip van gegevensverwerking\nHoe goed begrijp je hoe gegevens worden verwerkt in de AI-systemen die je gebruikt?",
           "options": [
-            { "value": 0, "label": "Ik heb geen idee wat er met mijn gegevens gebeurt" },
-            { "value": 1, "label": "Ik heb enig idee voor welke doelen mijn gegevens gebruikt worden" },
-            { "value": 2, "label": "Ik begrijp volledig hoe mijn gegevens worden verwerkt" }
-          ]
+            {
+              "value": 0,
+              "label": "Ik heb geen idee wat er met mijn gegevens gebeurt",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Ik heb enig idee voor welke doelen mijn gegevens gebruikt worden",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Ik begrijp volledig hoe mijn gegevens worden verwerkt",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID21",
           "text": "Toezicht op AI-uitvoering\nHoe vaak controleer je de output van AI-systemen voordat je deze gebruikt in je onderwijs?",
           "options": [
-            { "value": 0, "label": "Nooit" },
-            { "value": 1, "label": "Soms" },
-            { "value": 2, "label": "Altijd" }
-          ]
+            {
+              "value": 0,
+              "label": "Nooit",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Soms",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Altijd",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID22",
           "text": "Menselijke interventie\nHoe gemakkelijk kun je ingrijpen als AI een fout maakt in een educatieve context?",
           "options": [
-            { "value": 0, "label": "Niet mogelijk" },
-            { "value": 1, "label": "Soms mogelijk" },
-            { "value": 2, "label": "Altijd mogelijk" }
+            {
+              "value": 0,
+              "label": "Niet mogelijk",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Soms mogelijk",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Altijd mogelijk",
+              "score": 2
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "weight": 1,
+      "recommendations": [
+        {
+          "type": "low",
+          "threshold": 40,
+          "advice": [
+            "Leer meer over ‘human-in-the-loop’-principes. Zie: https://www.ibm.com/blogs/research/2020/11/human-in-the-loop-ai/",
+            "Oefen met het valideren van AI-output — bijvoorbeeld door AI-resultaten te vergelijken met menselijke beoordelingen."
+          ]
+        },
+        {
+          "type": "mid",
+          "threshold": 70,
+          "advice": [
+            "Maak AI-toezicht onderdeel van je workflow. Plan vaste momenten om AI-output te checken.",
+            "Gebruik voorbeelden uit je onderwijspraktijk om te bespreken waar menselijke controle essentieel is."
+          ]
+        },
+        {
+          "type": "high",
+          "threshold": 90,
+          "advice": [
+            "Fantastisch! Je past menselijke controle goed toe. Deel je werkwijze in je team en inspireer anderen."
           ]
         }
       ]
@@ -75,18 +207,70 @@
           "id": "QID25",
           "text": "Gebruik van generatieve AI in het onderwijs\nHoe goed weet je hoe generatieve AI kan worden ingezet om het leren te verbeteren?",
           "options": [
-            { "value": 0, "label": "Ik heb geen idee hoe generatieve AI kan helpen" },
-            { "value": 1, "label": "Ik heb enig idee van de voor- en nadelen" },
-            { "value": 2, "label": "Ik weet hoe ik AI optimaal kan benutten in mijn onderwijs" }
-          ]
+            {
+              "value": 0,
+              "label": "Ik heb geen idee hoe generatieve AI kan helpen",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Ik heb enig idee van de voor- en nadelen",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Ik weet hoe ik AI optimaal kan benutten in mijn onderwijs",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID26",
           "text": "Uitlegbaarheid van AI\nHoe goed kun je uitleggen aan studenten hoe AI tot bepaalde adviezen of output komt?",
           "options": [
-            { "value": 0, "label": "Ik kan dit niet uitleggen" },
-            { "value": 1, "label": "Ik kan het gedeeltelijk uitleggen" },
-            { "value": 2, "label": "Ik kan het volledig uitleggen" }
+            {
+              "value": 0,
+              "label": "Ik kan dit niet uitleggen",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Ik kan het gedeeltelijk uitleggen",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Ik kan het volledig uitleggen",
+              "score": 2
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "weight": 1,
+      "recommendations": [
+        {
+          "type": "low",
+          "threshold": 40,
+          "advice": [
+            "Volg een microlearning over uitlegbaarheid van AI: https://teachingai.eu/",
+            "Probeer AI-beslissingen in je eigen woorden uit te leggen — dat helpt studenten begrijpen hoe AI werkt."
+          ]
+        },
+        {
+          "type": "mid",
+          "threshold": 70,
+          "advice": [
+            "Ontwikkel een korte oefening waarin studenten uitleggen waarom een AI-tool iets ‘vindt’.",
+            "Gebruik tools met ‘explain’ functies (zoals Copilot of Grammarly) om transparantie te demonstreren."
+          ]
+        },
+        {
+          "type": "high",
+          "threshold": 90,
+          "advice": [
+            "Top! Je stimuleert AI-transparantie. Deel je uitlegvoorbeelden met collega’s als best practice."
           ]
         }
       ]
@@ -99,27 +283,92 @@
           "id": "QID29",
           "text": "Verbeteren van de kwaliteit van onderwijs\nHoe goed benut je AI-tools om de onderwijskwaliteit en betrokkenheid van studenten te verhogen?",
           "options": [
-            { "value": 0, "label": "Ik weet niet hoe AI-tools hierbij helpen" },
-            { "value": 1, "label": "Ik heb enig idee van de voor- en nadelen" },
-            { "value": 2, "label": "Ik benut AI-tools optimaal voor beter onderwijs" }
-          ]
+            {
+              "value": 0,
+              "label": "Ik weet niet hoe AI-tools hierbij helpen",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Ik heb enig idee van de voor- en nadelen",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Ik benut AI-tools optimaal voor beter onderwijs",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID3",
           "text": "Controleren van nauwkeurigheid\nHoe vaak controleer je of de output van generatieve AI correct is?",
           "options": [
-            { "value": 0, "label": "Nooit" },
-            { "value": 1, "label": "Soms" },
-            { "value": 2, "label": "Vaak" }
-          ]
+            {
+              "value": 0,
+              "label": "Nooit",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Soms",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Vaak",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID30",
           "text": "AI voor differentiatie\nHoe vaak gebruik je AI om het onderwijs af te stemmen op individuele leerbehoeften?",
           "options": [
-            { "value": 0, "label": "Nooit" },
-            { "value": 1, "label": "Soms" },
-            { "value": 2, "label": "Vaak" }
+            {
+              "value": 0,
+              "label": "Nooit",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Soms",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Vaak",
+              "score": 2
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "weight": 1,
+      "recommendations": [
+        {
+          "type": "low",
+          "threshold": 40,
+          "advice": [
+            "Bekijk een webinar over AI in onderwijsinnovatie: https://www.surf.nl/webinar-ai-in-het-onderwijs",
+            "Start met een kleine AI-toepassing, zoals automatische feedback of samenvattingstools."
+          ]
+        },
+        {
+          "type": "mid",
+          "threshold": 70,
+          "advice": [
+            "Gebruik AI voor differentiatie of leerondersteuning — probeer tools zoals ChatGPT of EduGPT met duidelijke instructies.",
+            "Werk samen met collega’s om AI te gebruiken bij reflectie of peer feedback."
+          ]
+        },
+        {
+          "type": "high",
+          "threshold": 90,
+          "advice": [
+            "Knap werk! Jij benut AI al effectief. Denk na over het ontwikkelen van een best practice of training voor je team."
           ]
         }
       ]
@@ -132,18 +381,70 @@
           "id": "QID33",
           "text": "Begrip van algoritmes\nHoe goed begrijp je hoe AI-algoritmes werken in de tools die je gebruikt?",
           "options": [
-            { "value": 0, "label": "Ik heb geen idee hoe de algoritmes werken" },
-            { "value": 1, "label": "Ik heb enig idee hoe de algoritmes werken" },
-            { "value": 2, "label": "Ik begrijp volledig hoe de algoritmes werken" }
-          ]
+            {
+              "value": 0,
+              "label": "Ik heb geen idee hoe de algoritmes werken",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Ik heb enig idee hoe de algoritmes werken",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Ik begrijp volledig hoe de algoritmes werken",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID34",
           "text": "Aanpassen van algoritmes\nHoe comfortabel ben je met het aanpassen of configureren van AI-algoritmes voor jouw onderwijsdoelen?",
           "options": [
-            { "value": 0, "label": "Niet comfortabel" },
-            { "value": 1, "label": "Enigszins comfortabel" },
-            { "value": 2, "label": "Zeer comfortabel" }
+            {
+              "value": 0,
+              "label": "Niet comfortabel",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Enigszins comfortabel",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Zeer comfortabel",
+              "score": 2
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "weight": 1,
+      "recommendations": [
+        {
+          "type": "low",
+          "threshold": 40,
+          "advice": [
+            "Bekijk de gratis cursus ‘Elements of AI’: https://www.elementsofai.com/nl/",
+            "Leer over hoe algoritmes werken via korte video’s van AI Campus NL."
+          ]
+        },
+        {
+          "type": "mid",
+          "threshold": 70,
+          "advice": [
+            "Verdiep je in termen als ‘dataset’, ‘bias’, en ‘parameter’. Dit versterkt je algoritmebegrip.",
+            "Bespreek met collega’s hoe AI-modellen beslissingen nemen — leer van elkaars inzichten."
+          ]
+        },
+        {
+          "type": "high",
+          "threshold": 90,
+          "advice": [
+            "Geweldig! Jij begrijpt hoe algoritmes werken. Overweeg een lezing of training te geven voor collega’s."
           ]
         }
       ]
@@ -156,18 +457,70 @@
           "id": "QID38",
           "text": "Zorgen voor eerlijkheid\nHoe goed ben je op de hoogte van mogelijke vooroordelen en bias in generatieve AI?",
           "options": [
-            { "value": 0, "label": "Ik heb geen idee dat AI bias kan veroorzaken" },
-            { "value": 1, "label": "Ik heb enig idee van mogelijke bias" },
-            { "value": 2, "label": "Ik weet welke bias mogelijk is en hoe deze te vermijden" }
-          ]
+            {
+              "value": 0,
+              "label": "Ik heb geen idee dat AI bias kan veroorzaken",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Ik heb enig idee van mogelijke bias",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Ik weet welke bias mogelijk is en hoe deze te vermijden",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID39",
           "text": "Inclusieve AI-toepassing\nHoe vaak pas je AI zodanig toe dat het alle studenten gelijk behandelt?",
           "options": [
-            { "value": 0, "label": "Nooit" },
-            { "value": 1, "label": "Soms" },
-            { "value": 2, "label": "Altijd" }
+            {
+              "value": 0,
+              "label": "Nooit",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Soms",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Altijd",
+              "score": 2
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "weight": 1,
+      "recommendations": [
+        {
+          "type": "low",
+          "threshold": 40,
+          "advice": [
+            "Lees meer over bias in AI: https://teachingai.eu/resources/bias",
+            "Evalueer AI-tools op inclusiviteit — laat studenten voorbeelden zoeken van niet-neutrale output."
+          ]
+        },
+        {
+          "type": "mid",
+          "threshold": 70,
+          "advice": [
+            "Organiseer een gesprek over gelijke kansen bij AI-gebruik in het onderwijs.",
+            "Gebruik scenario’s om te laten zien hoe AI per ongeluk oneerlijk kan zijn."
+          ]
+        },
+        {
+          "type": "high",
+          "threshold": 90,
+          "advice": [
+            "Geweldig dat je aandacht hebt voor inclusiviteit! Blijf AI kritisch bekijken en inspireer anderen."
           ]
         }
       ]
@@ -180,18 +533,70 @@
           "id": "QID43",
           "text": "Begrip van milieueffecten\nHoe goed ben je op de hoogte van de milieu-impact van het gebruik van generatieve AI?",
           "options": [
-            { "value": 0, "label": "Ik heb geen idee" },
-            { "value": 1, "label": "Ik heb enig idee" },
-            { "value": 2, "label": "Ik begrijp volledig de milieu-impact" }
-          ]
+            {
+              "value": 0,
+              "label": "Ik heb geen idee",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Ik heb enig idee",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Ik begrijp volledig de milieu-impact",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID44",
           "text": "Maatschappelijke effecten\nHoe goed begrijp je de sociale gevolgen van het gebruik van AI in onderwijscontexten?",
           "options": [
-            { "value": 0, "label": "Ik heb geen idee" },
-            { "value": 1, "label": "Ik heb enig idee" },
-            { "value": 2, "label": "Ik begrijp volledig de sociale effecten" }
+            {
+              "value": 0,
+              "label": "Ik heb geen idee",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Ik heb enig idee",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Ik begrijp volledig de sociale effecten",
+              "score": 2
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "weight": 1,
+      "recommendations": [
+        {
+          "type": "low",
+          "threshold": 40,
+          "advice": [
+            "Onderzoek de ecologische voetafdruk van AI via: https://aiandclimate.org/",
+            "Bespreek met studenten hoe AI invloed heeft op banen en duurzaamheid."
+          ]
+        },
+        {
+          "type": "mid",
+          "threshold": 70,
+          "advice": [
+            "Vergelijk de maatschappelijke voor- en nadelen van AI in je vakgebied.",
+            "Stimuleer studenten om kritisch na te denken over AI-ethiek en duurzaamheid."
+          ]
+        },
+        {
+          "type": "high",
+          "threshold": 90,
+          "advice": [
+            "Prima werk! Je betrekt maatschappelijke thema’s actief bij AI-gebruik. Blijf dat uitdragen."
           ]
         }
       ]
@@ -204,18 +609,70 @@
           "id": "QID48",
           "text": "Evalueren van effectiviteit\nHoe vaak evalueer je het effect van AI-toepassingen in je onderwijs?",
           "options": [
-            { "value": 0, "label": "Ik evalueer nooit" },
-            { "value": 1, "label": "Ik evalueer soms" },
-            { "value": 2, "label": "Ik evalueer vaak" }
-          ]
+            {
+              "value": 0,
+              "label": "Ik evalueer nooit",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Ik evalueer soms",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Ik evalueer vaak",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID49",
           "text": "Verantwoording afleggen\nHoe vaak rapporteer je aan collega’s of management over de resultaten van AI-gebruik in je onderwijs?",
           "options": [
-            { "value": 0, "label": "Nooit" },
-            { "value": 1, "label": "Soms" },
-            { "value": 2, "label": "Vaak" }
+            {
+              "value": 0,
+              "label": "Nooit",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Soms",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Vaak",
+              "score": 2
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "weight": 1,
+      "recommendations": [
+        {
+          "type": "low",
+          "threshold": 40,
+          "advice": [
+            "Maak een simpel reflectieverslag over hoe AI je onderwijs beïnvloedt.",
+            "Plan een overleg met je team over gezamenlijke verantwoording en reflectie op AI-gebruik."
+          ]
+        },
+        {
+          "type": "mid",
+          "threshold": 70,
+          "advice": [
+            "Gebruik een logboek of checklist om AI-toepassingen te evalueren.",
+            "Evalueer de impact van AI op leeruitkomsten en deel die inzichten met collega’s."
+          ]
+        },
+        {
+          "type": "high",
+          "threshold": 90,
+          "advice": [
+            "Top! Je reflecteert en verantwoordt actief. Overweeg om jouw evaluatiemethode te publiceren of te delen."
           ]
         }
       ]
@@ -228,21 +685,48 @@
           "id": "QID53",
           "text": "Gebruik van gegevens\nGa je akkoord met het gebruik van je gegevens voor onderzoek naar AI-maturiteit in het onderwijs?",
           "options": [
-            { "value": 0, "label": "Ik ga niet akkoord" },
-            { "value": 1, "label": "Ik ga akkoord" },
-            { "value": 2, "label": "Ik ga akkoord en geef extra informatie over mijn instelling" }
-          ]
+            {
+              "value": 0,
+              "label": "Ik ga niet akkoord",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Ik ga akkoord",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Ik ga akkoord en geef extra informatie over mijn instelling",
+              "score": 2
+            }
+          ],
+          "weight": 1
         },
         {
           "id": "QID54",
           "text": "Controle over gegevens\nHoe belangrijk vind je het dat je controle behoudt over je eigen gegevens bij het gebruik van AI?",
           "options": [
-            { "value": 0, "label": "Niet belangrijk" },
-            { "value": 1, "label": "Enigszins belangrijk" },
-            { "value": 2, "label": "Zeer belangrijk" }
-          ]
+            {
+              "value": 0,
+              "label": "Niet belangrijk",
+              "score": 0
+            },
+            {
+              "value": 1,
+              "label": "Enigszins belangrijk",
+              "score": 1
+            },
+            {
+              "value": 2,
+              "label": "Zeer belangrijk",
+              "score": 2
+            }
+          ],
+          "weight": 1
         }
-      ]
+      ],
+      "weight": 1
     }
   ]
 }

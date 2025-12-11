@@ -47,137 +47,27 @@ function loadLastSavedSession() {
   }
 }
 
-function getRecommendation(score, title) {
-  if (score === null) return null;
+function getRecommendation(score, domainId, domainsData) {
+  if (score === null || !domainsData) return null;
 
-  const s = score;
-  const t = title.toLowerCase();
+  const domain = domainsData.find(d => d.id === domainId);
+  if (!domain || !domain.recommendations) return null;
 
   const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-  const domainAdvice = {
-    "begrip van het gebruik van generatieve ai door studenten": { // <-- Temporary, kun je altijd aanpassen, chatgpt heeft dit gegenereerd, maar lijkt oke?
-      low: [
-        "Volg een korte workshop over AI-gebruik door studenten en bespreek voorbeelden van verantwoord gebruik in jouw les.",
-        "Lees meer over AI-geletterdheid bij studenten: https://www.surf.nl/ai-in-het-onderwijs",
-        "Ontwerp een mini-les waarin studenten reflecteren op hun eigen AI-gebruik.",
-      ],
-      mid: [
-        "Integreer AI-ethiek in opdrachten. Laat studenten bespreken hoe AI hun leerproces beïnvloedt.",
-        "Gebruik tools zoals ChatGPT als voorbeeld, en bespreek de voor- en nadelen in kleine groepen.",
-      ],
-      high: [
-        "Je begeleidt studenten al goed! Overweeg om jouw aanpak te delen met collega’s via een workshop of artikel.",
-        "Organiseer een studentendialoog over verantwoord AI-gebruik om bewustwording te vergroten.",
-      ],
-    },
+  let adviceList = null;
+  if (score < 40) {
+    adviceList = domain.recommendations.find(r => r.type === 'low')?.advice;
+  } else if (score < 70) {
+    adviceList = domain.recommendations.find(r => r.type === 'mid')?.advice;
+  } else { // score >= 70
+    adviceList = domain.recommendations.find(r => r.type === 'high')?.advice;
+  }
 
-    "menselijke controle en toezicht": {
-      low: [
-        "Leer meer over ‘human-in-the-loop’-principes. Zie: https://www.ibm.com/blogs/research/2020/11/human-in-the-loop-ai/",
-        "Oefen met het valideren van AI-output — bijvoorbeeld door AI-resultaten te vergelijken met menselijke beoordelingen.",
-      ],
-      mid: [
-        "Maak AI-toezicht onderdeel van je workflow. Plan vaste momenten om AI-output te checken.",
-        "Gebruik voorbeelden uit je onderwijspraktijk om te bespreken waar menselijke controle essentieel is.",
-      ],
-      high: [
-        "Fantastisch! Je past menselijke controle goed toe. Deel je werkwijze in je team en inspireer anderen.",
-      ],
-    },
-
-    transparantie: {
-      low: [
-        "Volg een microlearning over uitlegbaarheid van AI: https://teachingai.eu/",
-        "Probeer AI-beslissingen in je eigen woorden uit te leggen — dat helpt studenten begrijpen hoe AI werkt.",
-      ],
-      mid: [
-        "Ontwikkel een korte oefening waarin studenten uitleggen waarom een AI-tool iets ‘vindt’.",
-        "Gebruik tools met ‘explain’ functies (zoals Copilot of Grammarly) om transparantie te demonstreren.",
-      ],
-      high: [
-        "Top! Je stimuleert AI-transparantie. Deel je uitlegvoorbeelden met collega’s als best practice.",
-      ],
-    },
-
-    "verbetering van onderwijskwaliteit met ai": {
-      low: [
-        "Bekijk een webinar over AI in onderwijsinnovatie: https://www.surf.nl/webinar-ai-in-het-onderwijs",
-        "Start met een kleine AI-toepassing, zoals automatische feedback of samenvattingstools.",
-      ],
-      mid: [
-        "Gebruik AI voor differentiatie of leerondersteuning — probeer tools zoals ChatGPT of EduGPT met duidelijke instructies.",
-        "Werk samen met collega’s om AI te gebruiken bij reflectie of peer feedback.",
-      ],
-      high: [
-        "Knap werk! Jij benut AI al effectief. Denk na over het ontwikkelen van een best practice of training voor je team.",
-      ],
-    },
-
-    algoritmekennis: {
-      low: [
-        "Bekijk de gratis cursus ‘Elements of AI’: https://www.elementsofai.com/nl/",
-        "Leer over hoe algoritmes werken via korte video’s van AI Campus NL.",
-      ],
-      mid: [
-        "Verdiep je in termen als ‘dataset’, ‘bias’, en ‘parameter’. Dit versterkt je algoritmebegrip.",
-        "Bespreek met collega’s hoe AI-modellen beslissingen nemen — leer van elkaars inzichten.",
-      ],
-      high: [
-        "Geweldig! Jij begrijpt hoe algoritmes werken. Overweeg een lezing of training te geven voor collega’s.",
-      ],
-    },
-
-    "eerlijkheid en inclusiviteit": {
-      low: [
-        "Lees meer over bias in AI: https://teachingai.eu/resources/bias",
-        "Evalueer AI-tools op inclusiviteit — laat studenten voorbeelden zoeken van niet-neutrale output.",
-      ],
-      mid: [
-        "Organiseer een gesprek over gelijke kansen bij AI-gebruik in het onderwijs.",
-        "Gebruik scenario’s om te laten zien hoe AI per ongeluk oneerlijk kan zijn.",
-      ],
-      high: [
-        "Geweldig dat je aandacht hebt voor inclusiviteit! Blijf AI kritisch bekijken en inspireer anderen.",
-      ],
-    },
-
-    "maatschappelijk en milieu-impact": {
-      low: [
-        "Onderzoek de ecologische voetafdruk van AI via: https://aiandclimate.org/",
-        "Bespreek met studenten hoe AI invloed heeft op banen en duurzaamheid.",
-      ],
-      mid: [
-        "Vergelijk de maatschappelijke voor- en nadelen van AI in je vakgebied.",
-        "Stimuleer studenten om kritisch na te denken over AI-ethiek en duurzaamheid.",
-      ],
-      high: [
-        "Prima werk! Je betrekt maatschappelijke thema’s actief bij AI-gebruik. Blijf dat uitdragen.",
-      ],
-    },
-
-    verantwoording: {
-      low: [
-        "Maak een simpel reflectieverslag over hoe AI je onderwijs beïnvloedt.",
-        "Plan een overleg met je team over gezamenlijke verantwoording en reflectie op AI-gebruik.",
-      ],
-      mid: [
-        "Gebruik een logboek of checklist om AI-toepassingen te evalueren.",
-        "Evalueer de impact van AI op leeruitkomsten en deel die inzichten met collega’s.",
-      ],
-      high: [
-        "Top! Je reflecteert en verantwoordt actief. Overweeg om jouw evaluatiemethode te publiceren of te delen.",
-      ],
-    },
-  };
-
-  const domain = domainAdvice[t];
-  if (!domain) return null;
-
-  if (s < 40) return pick(domain.low);
-  if (s < 70) return pick(domain.mid);
-  if (s >= 90) return `🎉 ${pick(domain.high)} Goed gedaan!`; //<-- laat gebruiker blij zijn vanaf 90 punten per domein.
-  return pick(domain.high);
+  if (!adviceList || adviceList.length === 0) return null;
+  
+  const selectedAdvice = pick(adviceList);
+  return (score >= 90 && domain.recommendations.find(r => r.type === 'high')) ? `🎉 ${selectedAdvice} Goed gedaan!` : selectedAdvice;
 }
 
 export default function ResultPage({ location }) {
@@ -211,7 +101,7 @@ export default function ResultPage({ location }) {
   }, [state]);
 
   const isLoading = !state;
-  const domains = state?.domains || surveyJson.domains || [];
+  const domains = state?.domains || surveyJson.domains || []; // Ensure 'domains' is available
   const answers = state?.answers || {};
   const result = state ? computeDomainScores(domains, answers) : null;
 
@@ -306,7 +196,7 @@ export default function ResultPage({ location }) {
       .map((d) => ({
         title: d.title,
         score: d.score,
-        advies: getRecommendation(d.score, d.title),
+        advies: getRecommendation(d.score, d.id, domains),
       }));
 
     if (adviezen.length) {
@@ -424,7 +314,7 @@ export default function ResultPage({ location }) {
                 {filteredDomainResults
                   .filter((d) => d.score < 70 && d.score !== null)
                   .map((d) => {
-                    const advies = getRecommendation(d.score, d.title);
+                    const advies = getRecommendation(d.score, d.id, domains);
 
                     const chatPrompt = encodeURIComponent(
                       `Ik heb AI Maturity test gedaan en kreeg een lage score ${d.score}/100 op het domein "${d.title}". Het advies is: "${advies}". Help me een concreet actieplan te maken om dit doel te bereiken, stap voor stap. Ik wil er niet al te lang over doen.`

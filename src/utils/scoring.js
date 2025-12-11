@@ -48,12 +48,23 @@ export function computeDomainScores(domains, answers = {}, options = {}) {
       }
 
       const opts = Array.isArray(q.options) ? q.options : [];
-      const minVal = opts.length ? Math.min(...opts.map((o) => Number(o.value))) : 0;
-      const maxVal = opts.length ? Math.max(...opts.map((o) => Number(o.value))) : 1;
-      const clamped = Math.min(maxVal, Math.max(minVal, Number(norm)));
+      // Find the selected option to get its explicit score if available
+      const selectedOption = opts.find(opt => normalizeAnswerValue(opt.value) === norm);
+      let itemScore;
 
-      const denom = (maxVal - minVal) || 1;
-      const itemScore = ((clamped - minVal) / denom) * 100;
+      if (selectedOption && typeof selectedOption.score === 'number') {
+        // If an explicit score is defined, use it. Scale it to 0-100 based on min/max scores available in options.
+        const minScore = opts.length ? Math.min(...opts.map((o) => typeof o.score === 'number' ? o.score : Number(o.value))) : 0;
+        const maxScore = opts.length ? Math.max(...opts.map((o) => typeof o.score === 'number' ? o.score : Number(o.value))) : 1;
+        const scoreDenom = (maxScore - minScore) || 1;
+        itemScore = ((selectedOption.score - minScore) / scoreDenom) * 100;
+      } else {
+        // Fallback to existing linear calculation based on value
+        const minVal = opts.length ? Math.min(...opts.map((o) => Number(o.value))) : 0;
+        const maxVal = opts.length ? Math.max(...opts.map((o) => Number(o.value))) : 1;
+        const valueDenom = (maxVal - minVal) || 1;
+        itemScore = ((norm - minVal) / valueDenom) * 100;
+      }
 
       weightedSum += itemScore * weight;
       weightTotal += weight;
@@ -77,10 +88,18 @@ export function computeDomainScores(domains, answers = {}, options = {}) {
     });
   }
 
-  const validDomainScores = domainResults.map((d) => d.score).filter((s) => s !== null);
-  const overall = validDomainScores.length
-    ? Math.round(validDomainScores.reduce((a, b) => a + b, 0) / validDomainScores.length)
-    : 0;
+  let overallWeightedSum = 0;
+  let overallWeightTotal = 0;
+
+  for (const d of domainResults) {
+    if (d.score !== null) {
+      const domainWeight = typeof d.weight === "number" ? d.weight : 1;
+      overallWeightedSum += d.score * domainWeight;
+      overallWeightTotal += domainWeight;
+    }
+  }
+
+  const overall = overallWeightTotal ? Math.round(overallWeightedSum / overallWeightTotal) : 0;
 
   let level = "Novice";
   if (overall >= 80) level = "Advanced";
