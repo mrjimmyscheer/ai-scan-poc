@@ -32,11 +32,11 @@ export default function LandingPage() {
         transition={{ duration: 0.8 }}
         className="relative z-10 flex flex-col items-center gap-6 text-center px-6"
       >
-        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-purple-100 drop-shadow-lg">
+        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-foreground drop-shadow-lg">
           AI Maturity Scan
         </h1>
 
-        <p className="mt-2 text-base md:text-lg text-purple-100/80 drop-shadow-sm max-w-lg">
+        <p className="mt-2 text-base md:text-lg text-muted-foreground drop-shadow-sm max-w-lg">
           Een korte, praktische scan die inzicht geeft in kennis, toepassing en governance rondom AI, speciaal voor docenten en studenten.
         </p>
 
@@ -56,7 +56,7 @@ export default function LandingPage() {
           )}
         </div>
 
-        <ul className="mt-4 text-xs md:text-sm text-purple-100/60 space-y-1 max-w-xs">
+        <ul className="mt-4 text-xs md:text-sm text-muted-foreground/80 space-y-1 max-w-xs">
           <li>• Duur: ~5–8 minuten — één vraag per keer.</li>
           <li>• Resultaat: maturity-niveau + aanbevelingen.</li>
           <li className="font-bold">• Privacy: data blijft lokaal in de browser.</li>
